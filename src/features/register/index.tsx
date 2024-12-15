@@ -3,32 +3,51 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import useRegister from "@/hooks/api/auth/useRegister";
 import { useFormik } from "formik";
-import { LoginSchema } from "./schemas";
-import useLogin from "@/hooks/api/auth/useLogin";
+import { RegisterSchema } from "./schemas";
 import Link from "next/link";
 
-const LoginPage = () => {
-  const { mutateAsync: login, isPending } = useLogin();
+const RegisterPage = () => {
+  const { mutateAsync: register, isPending } = useRegister();
   const formik = useFormik({
     initialValues: {
+      fullname: "",
       email: "",
       password: "",
+      referralCode: "",
     },
-    validationSchema: LoginSchema,
+    validationSchema: RegisterSchema,
     onSubmit: async (values) => {
-      await login(values);
+      await register(values);
     },
   });
+
   return (
     <main className="flex justify-center pt-20">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
+          <CardTitle>Register</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={formik.handleSubmit}>
             <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="fullname">Full Name</Label>
+                <Input
+                  name="fullname"
+                  type="text"
+                  placeholder="Name"
+                  value={formik.values.fullname}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {!!formik.touched.fullname && !!formik.errors.fullname ? (
+                  <p className="text-xs text-red-500">
+                    {formik.errors.fullname}
+                  </p>
+                ) : null}
+              </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -59,24 +78,36 @@ const LoginPage = () => {
                   </p>
                 ) : null}
               </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="referralCode">Referral Code (Optional)</Label>
+                <Input
+                  name="referralCode"
+                  type="text"
+                  placeholder="Referral Code"
+                  value={formik.values.referralCode}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {!!formik.touched.referralCode &&
+                !!formik.errors.referralCode ? (
+                  <p className="text-xs text-red-500">
+                    {formik.errors.referralCode}
+                  </p>
+                ) : null}
+              </div>
             </div>
             <Button
               type="submit"
               className="mt-4 w-full bg-[#80AE44] text-black hover:bg-[#9AC265]"
               disabled={isPending}
             >
-              {isPending ? "loading..." : "Login"}
+              {isPending ? "loading..." : "Register"}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
-            Dont have an account ?{" "}
-            <Link href="/register" className="text-blue-500 underline">
-              Register
-            </Link>
-          </div>
-          <div className="mt-4 text-center text-sm">
-            <Link href="/forgot-password" className="text-blue-500 underline">
-              Forgot Password
+            Already have account ?{" "}
+            <Link href="/login" className="text-blue-500 underline">
+              Login
             </Link>
           </div>
         </CardContent>
@@ -85,4 +116,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
