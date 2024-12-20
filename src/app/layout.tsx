@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import StoreProvider from "@/providers/StoreProvider";
-import AuthProvider from "@/providers/AuthProvider";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import StoreProvider from "@/providers/StoreProvider";
+import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
+import NextAuthProvider from "@/providers/NextAuthProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Ticket App",
@@ -19,12 +20,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StoreProvider>
-          <AuthProvider>
-            <ReactQueryProvider>{children}</ReactQueryProvider>
-            <ToastContainer />
-          </AuthProvider>
-        </StoreProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextAuthProvider>
+            <StoreProvider>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
+              <ToastContainer />
+            </StoreProvider>
+          </NextAuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

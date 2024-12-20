@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { LoginSchema } from "./schemas";
 import useLogin from "@/hooks/api/auth/useLogin";
 import Link from "next/link";
+import Image from "next/image";
 
 const LoginPage = () => {
   const { mutateAsync: login, isPending } = useLogin();
@@ -21,68 +22,96 @@ const LoginPage = () => {
     },
   });
   return (
-    <main className="flex justify-center pt-20">
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="example@mail.com"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+    <main className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-3xl">
+        <div className="flex flex-col gap-6">
+          <Card className="overflow-hidden">
+            <CardContent className="grid p-0 md:grid-cols-2">
+              <form onSubmit={formik.handleSubmit} className="p-6 md:p-8">
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col items-center text-center">
+                    <h1 className="text-2xl font-bold">Welcome back</h1>
+                    <p className="text-balance text-muted-foreground">
+                      Login to your Suket account
+                    </p>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="example@mail.com"
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {!!formik.touched.email && !!formik.errors.email ? (
+                      <p className="text-xs text-red-500">
+                        {formik.errors.email}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="grid gap-2">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Password</Label>
+
+                      <Link
+                        href="/forgot-password"
+                        className="ml-auto text-sm underline-offset-2 hover:text-blue-500 hover:underline"
+                      >
+                        Forgot your password?
+                      </Link>
+                    </div>
+                    <Input
+                      name="password"
+                      type="password"
+                      placeholder="Password"
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    {!!formik.touched.password && !!formik.errors.password ? (
+                      <p className="text-xs text-red-500">
+                        {formik.errors.password}
+                      </p>
+                    ) : null}
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#80AE44] text-black hover:bg-[#9AC265]"
+                    disabled={isPending}
+                  >
+                    {isPending ? "loading..." : "Login"}
+                  </Button>
+
+                  <div className="text-center text-sm">
+                    Don&apos;t have an account?{" "}
+                    <Link
+                      href="/register"
+                      className="underline underline-offset-4 hover:text-blue-500"
+                    >
+                      Sign up
+                    </Link>
+                  </div>
+                </div>
+              </form>
+              <div className="relative hidden bg-muted md:block">
+                <Image
+                  src="/placeholder.svg"
+                  alt="Image"
+                  fill
+                  className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                 />
-                {!!formik.touched.email && !!formik.errors.email ? (
-                  <p className="text-xs text-red-500">{formik.errors.email}</p>
-                ) : null}
               </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {!!formik.touched.password && !!formik.errors.password ? (
-                  <p className="text-xs text-red-500">
-                    {formik.errors.password}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-            <Button
-              type="submit"
-              className="mt-4 w-full bg-[#80AE44] text-black hover:bg-[#9AC265]"
-              disabled={isPending}
-            >
-              {isPending ? "loading..." : "Login"}
-            </Button>
-          </form>
-          <div className="mt-4 text-center text-sm">
-            Dont have an account ?{" "}
-            <Link href="/register" className="text-blue-500 underline">
-              Register
-            </Link>
+            </CardContent>
+          </Card>
+          <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
+            By clicking Login, you agree to our <a href="#">Terms of Service</a>{" "}
+            and <a href="#">Privacy Policy</a>.
           </div>
-          <div className="mt-4 text-center text-sm">
-            <Link href="/forgot-password" className="text-blue-500 underline">
-              Forgot Password
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </main>
   );
 };
-
 export default LoginPage;
