@@ -1,8 +1,13 @@
 export interface User {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-    createdAt: Date;
-    updatedAt: Date;
+  id: number;
+  email: string;
+  name: string;
+  fullname: string;
+  password: string;
+  profilePicture: string;
+  role: string;
+  referralCode: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
+

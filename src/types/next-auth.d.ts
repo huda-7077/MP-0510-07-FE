@@ -1,5 +1,5 @@
-import { User } from "./user";
 import { type DefaultSession } from "next-auth";
+import { User } from "./user";
 interface Payload extends User {
   token: string;
 }
