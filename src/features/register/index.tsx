@@ -8,15 +8,17 @@ import { useFormik } from "formik";
 import { RegisterSchema } from "./schemas";
 import Link from "next/link";
 import Image from "next/image";
+import { useQueryState } from "nuqs";
 
 const RegisterPage = () => {
+  const [search] = useQueryState("ref", { defaultValue: "" });
   const { mutateAsync: register, isPending } = useRegister();
   const formik = useFormik({
     initialValues: {
       fullname: "",
       email: "",
       password: "",
-      referralCode: "",
+      referralCode: search,
       confirmPassword: "",
     },
     validationSchema: RegisterSchema,
@@ -145,9 +147,11 @@ const RegisterPage = () => {
               </form>
               <div className="relative hidden bg-muted md:block">
                 <Image
-                  src="/placeholder.svg"
+                  src="/ticket2.avif"
                   alt="Image"
                   fill
+                  sizes=" ( min-width: 768px ) 50vw, 100vw"
+                  priority
                   className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                 />
               </div>
