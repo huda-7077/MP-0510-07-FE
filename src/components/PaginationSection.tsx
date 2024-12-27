@@ -1,3 +1,4 @@
+
 import { PaginationMeta } from "@/types/pagination";
 import { FC } from "react";
 import {
@@ -8,6 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./ui/pagination";
+
 interface PaginationSectionProps extends PaginationMeta {
   onChangePage: (page: number) => void;
 }
@@ -50,3 +52,4 @@ const PaginationSection: FC<PaginationSectionProps> = ({
 };
 
 export default PaginationSection;
+

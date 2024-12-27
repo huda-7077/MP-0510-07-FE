@@ -4,6 +4,14 @@ export interface PaginationQueries {
   sortBy?: string;
   sortOrder?: string;
 }
+
+export interface paginationQueries {
+  take?: number;
+  page?: number;
+  sortBy?: string;
+  sortOrder?: string;
+}
+
 export interface PaginationMeta {
   page: number;
   take: number;

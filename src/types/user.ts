@@ -1,6 +1,7 @@
 export interface User {
-  id: string;
+  id: number;
   email: string;
+  name: string;
   fullname: string;
   password: string;
   profilePicture: string;
@@ -9,3 +10,4 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
