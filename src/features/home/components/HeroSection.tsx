@@ -1,54 +1,43 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  type CarouselApi
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { useState } from "react";
-
-const slides = [
-  {
-    id: 1,
-    title: "La Liga 2024-25",
-    image: "/assets/coldplay.avif",
-    likes: "2.1K",
-  },
-  {
-    id: 2,
-    title: "Premier League",
-    image: "/assets/adele.avif",
-    likes: "1.8K",
-  },
-  {
-    id: 3,
-    title: "Champions League",
-    image: "/assets/coldplay.avif",
-    likes: "3.2K",
-  },
-  {
-    id: 4,
-    title: "Serie A",
-    image: "/assets/adele.avif",
-    likes: "1.5K",
-  },
-  {
-    id: 5,
-    title: "Bundesliga",
-    image: "/assets/coldplay.avif",
-    likes: "1.9K",
-  },
-];
+import useGetEvents from "@/hooks/api/event/useGetEvents";
+import Link from "next/link";
 
 export function HeroSection() {
   const [api, setApi] = useState<CarouselApi>();
   const [autoplayRef] = useState(() => Autoplay({ delay: 5000 }));
 
+  const {
+    data: events,
+    isLoading,
+    error,
+  } = useGetEvents({
+    page: 1,
+    take: 5,
+  });
 
+  if (isLoading) {
+    return (
+      <div className="h-[300px] w-full animate-pulse bg-gray-200 md:h-[600px]" />
+    );
+  }
+
+  if (error || !events) {
+    return (
+      <div className="flex h-[300px] w-full items-center justify-center bg-gray-100 md:h-[600px]">
+        Failed to load events
+      </div>
+    );
+  }
 
   return (
     <Carousel
@@ -57,28 +46,28 @@ export function HeroSection() {
         loop: true,
       }}
       plugins={[autoplayRef]}
-      className="w-full pt-10"
+      className="w-full pt-5 md:pt-10"
       setApi={setApi}
     >
       <CarouselContent>
-        {slides.map((slide) => (
-          <CarouselItem key={slide.id}>
-            <div className="relative h-[600px] max-w-7xl mx-auto">
+        {events.data.map((event) => (
+          <CarouselItem key={event.id}>
+            <div className="relative mx-auto h-[300px] max-w-7xl md:h-[600px]">
               <Image
-                src={slide.image}
-                alt={slide.title}
+                src={event.thumbnail}
+                alt={event.title}
                 fill
-                className="object-cover rounded-2xl"
+                className="object-cover"
               />
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute inset-0 flex items-center">
                 <div className="container mx-auto px-6">
-                  <div className="max-w-xl space-y-6">
-                    <h1 className="text-6xl font-bold text-white">
-                      {slide.title}
+                  <div className="max-w-sm space-y-6 md:max-w-xl">
+                    <h1 className="text-3xl font-bold text-white md:text-6xl">
+                      {event.title}
                     </h1>
                     <Button variant="secondary" size="lg">
-                      See Tickets
+                      <Link href={`/events/${event.id}`}>See Ticket</Link>
                     </Button>
                   </div>
                 </div>

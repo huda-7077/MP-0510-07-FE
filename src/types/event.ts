@@ -1,7 +1,10 @@
+import { User } from "./user";
+
 export interface Event {
   id: string;
   title: string;
   description: string;
+  full_description: string;
   eventCategory: string;
   userId: number;
   thumbnail: string;
@@ -12,4 +15,6 @@ export interface Event {
   location: string;
   createdAt: string;
   updatedAt: string;
+
+  user: Pick<User, "id" | "fullname" | "email">
 }
