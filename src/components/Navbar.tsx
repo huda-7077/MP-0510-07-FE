@@ -1,4 +1,5 @@
 "use client";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,10 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, UserIcon } from "lucide-react";
+import { Menu, User2Icon, UserIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ToggleDarkMode } from "./ToggleDarkMode";
 
 const Navbar = () => {
   const router = useRouter();
@@ -32,30 +34,33 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden cursor-pointer items-center gap-8 font-sans md:flex">
-            <Link href="/">Explore</Link>
+            <Link href="/explore">Explore</Link>
 
             {!user?.id && (
               <Link href="/login" className="flex items-center gap-4">
                 Sign In
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1a1a1a]">
-                  <UserIcon className="h-5 w-5 text-white" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full">
+                  <UserIcon className="h-5 w-5 text-black" />
                 </div>
               </Link>
             )}
             {!!user?.id && (
               <>
-                <p onClick={() => router.push("/write")}>Write</p>
+                <p onClick={() => router.push("/create-event")}>create event</p>
+                <p onClick={() => router.push("/create-event-categories")}>create event categories</p>
                 <p onClick={logout}>Logout</p>
-                <Link href="/">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1a1a1a]">
-                    <UserIcon className="h-5 w-5 text-white" />
+                <Link href="/dasboard">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full border-2">
+                    <User2Icon className="h-5 w-5" />
                   </div>
                 </Link>
               </>
             )}
+            <ToggleDarkMode />
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
+            <ToggleDarkMode />
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Menu />
