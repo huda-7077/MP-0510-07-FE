@@ -1,13 +1,12 @@
-'use client';
+"use client";
 import { FC } from "react";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { Label } from "./ui/label";
 
-// Dynamic import untuk QuillEditor
-const QuillEditor = dynamic(() => import('react-quill'), {
+const QuillEditor = dynamic(() => import("react-quill"), {
   ssr: false,
-  loading: () => <p>Loading editor...</p>
+  loading: () => <p>Loading editor...</p>,
 });
 
 interface RichTextEditorProps {

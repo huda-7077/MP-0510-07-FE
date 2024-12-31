@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, User2Icon, UserIcon } from "lucide-react";
+import { Menu, UserIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -34,6 +34,13 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden cursor-pointer items-center gap-8 font-sans md:flex">
+            {!!user?.id &&
+              (user?.role === "ADMIN" || user?.role === "ORGANIZER") && (
+                <>
+                  <Link href="/dashboard">Dashboard</Link>
+                </>
+              )}
+
             <Link href="/explore">Explore</Link>
 
             {!user?.id && (
@@ -47,11 +54,14 @@ const Navbar = () => {
             {!!user?.id && (
               <>
                 <p onClick={() => router.push("/create-event")}>create event</p>
-                <p onClick={() => router.push("/create-event-categories")}>create event categories</p>
+                <p onClick={() => router.push("/create-event-categories")}>
+                  create event categories
+                </p>
                 <p onClick={logout}>Logout</p>
-                <Link href="/dasboard">
+
+                <Link href="/account">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full border-2">
-                    <User2Icon className="h-5 w-5" />
+                    <UserIcon className="h-5 w-5" />
                   </div>
                 </Link>
               </>
@@ -72,7 +82,7 @@ const Navbar = () => {
                   <Link href="/">Home</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="/">Profile</Link>
+                  <Link href="/account">Profile</Link>
                 </DropdownMenuItem>
                 {!user?.id && (
                   <DropdownMenuItem>
