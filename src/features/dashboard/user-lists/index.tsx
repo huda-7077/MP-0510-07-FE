@@ -15,11 +15,9 @@ const UserListsPage = () => {
   const { data: session } = useSession();
   const token = session?.user.token;
 
-  // Existing query states
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [search, setSearch] = useQueryState("search", { defaultValue: "" });
 
-  // New query states for checkboxes
   const [organizerPending, setOrganizerPending] = useQueryState(
     "organizerPending",
     {

@@ -3,7 +3,6 @@ import { Organizer } from "./organizer";
 export interface User {
   id: number;
   email: string;
-  name: string;
   fullname: string;
   password: string;
   profilePicture: string;

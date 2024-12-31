@@ -23,10 +23,10 @@ const EventList = () => {
 
   return (
     <>
-      <section className="mx-32 py-20">
-        <h1 className="text-3xl font-bold text-gray-900">Upcoming Events</h1>
-        <div className="mt-4 grid grid-cols-4 gap-4 pt-10">
-          {data?.data.map((event, index) => {
+      <section className="mx-4 md:mx-32 py-20">
+        <h1 className="text-2xl md:text-3xl font-bold">Upcoming Events</h1>
+        <div className="mt-4 flex flex-col gap-4 pt-10 md:grid md:grid-cols-4">
+          {data?.data.slice(0, 4).map((event, index) => {
             return <EventCard key={index} event={event} />;
           })}
         </div>

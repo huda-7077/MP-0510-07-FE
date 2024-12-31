@@ -33,9 +33,6 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
         </div>
         <div className="flex items-start justify-between">
           <CardTitle className="text-xl">{event.title}</CardTitle>
-          <Badge variant={event.price === 0 ? "secondary" : "default"}>
-            {event.price === 0 ? "Free" : `$${event.price}`}
-          </Badge>
         </div>
         <CardDescription>{event.description}</CardDescription>
       </CardHeader>
@@ -51,15 +48,20 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
             <MapPin className="h-4 w-4" />
             <span>{event.location}</span>
           </div>
+          <div>
+            <Badge variant={event.price === 0 ? "secondary" : "default"}>
+              {event.price === 0 ? "Free" : `$${event.price}`}
+            </Badge>
+          </div>
         </div>
       </CardContent>
       <CardFooter className="flex items-center justify-between">
-        <span className="text-sm text-gray-600">
+        <span className="text-sm">
           {event.avaliableSeats} seats available
         </span>
 
         <Button>
-          <Link href={`/event/${event.id}`}>View Details</Link>
+          <Link href={`/events/${event.id}`}>Details</Link>
         </Button>
       </CardFooter>
     </Card>

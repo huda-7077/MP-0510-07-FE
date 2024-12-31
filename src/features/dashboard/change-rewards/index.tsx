@@ -1,20 +1,18 @@
 "use client";
-import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import useGetRewards from "@/hooks/api/rewards/useGetRewards";
-import useCreateRewards from "@/hooks/api/rewards/useCreateRewards";
-import useUpdateRewards from "@/hooks/api/rewards/useUpdateRewards";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import useCreateRewards from "@/hooks/api/rewards/useCreateRewards";
+import useGetRewards from "@/hooks/api/rewards/useGetRewards";
+import useUpdateRewards from "@/hooks/api/rewards/useUpdateRewards";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import ChangeRewardsSkeleton from "./components/ChangeRewardsSkeleton";
 
 const ChangeRewardsPage = () => {

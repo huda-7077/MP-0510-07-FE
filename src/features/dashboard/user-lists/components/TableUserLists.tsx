@@ -1,6 +1,7 @@
 "use client";
 
-import React, { FC } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -9,14 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { format } from "date-fns";
 import { User } from "@/types/user";
+import { format } from "date-fns";
+import { FC } from "react";
 import RequestOrganizerDialog from "./RequestOrganizerDialog";
-import { useSession } from "next-auth/react";
-import useUpdateRole from "@/hooks/api/user-lists/useUpdateRole";
 
 interface TableUserListsProps {
   data: { data: User[]; meta: { take: number } };

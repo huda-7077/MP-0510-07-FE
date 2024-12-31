@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import RejectDialog from "./RejectDialog"; // Assuming this is now the custom modal
+import RejectDialog from "./RejectDialog";
 import AcceptDialog from "./AcceptDialog";
 import { format } from "date-fns";
 
