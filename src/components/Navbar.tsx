@@ -32,6 +32,13 @@ const Navbar = () => {
           </Link>
 
           <div className="hidden cursor-pointer items-center gap-8 font-sans md:flex">
+            {!!user?.id &&
+              (user?.role === "ADMIN" || user?.role === "ORGANIZER") && (
+                <>
+                  <Link href="/dashboard">Dashboard</Link>
+                </>
+              )}
+
             <Link href="/">Explore</Link>
 
             {!user?.id && (
@@ -46,7 +53,7 @@ const Navbar = () => {
               <>
                 <p onClick={() => router.push("/write")}>Write</p>
                 <p onClick={logout}>Logout</p>
-                <Link href="/">
+                <Link href="/account">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1a1a1a]">
                     <UserIcon className="h-5 w-5 text-white" />
                   </div>
@@ -67,7 +74,7 @@ const Navbar = () => {
                   <Link href="/">Home</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="/">Profile</Link>
+                  <Link href="/account">Profile</Link>
                 </DropdownMenuItem>
                 {!user?.id && (
                   <DropdownMenuItem>
