@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Navbar from "@/components/Navbar";
 import RichTextEditor from "@/components/RichTextEditor";
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import useGetEventCategories from "@/hooks/api/event-categories/useGetEventCategories";
 import useCreateEvent from "@/hooks/api/event/useCreateEvent";
+import { categories } from "@/utils/categories";
 import { cities } from "@/utils/cities";
 import { useFormik } from "formik";
 import Image from "next/image";
@@ -21,7 +21,6 @@ import { ChangeEvent, useRef, useState } from "react";
 
 const CreateEventPage = () => {
   const { mutateAsync: createEvent, isPending } = useCreateEvent();
-  const { data: eventCategories, isLoading } = useGetEventCategories({});
 
   const formik = useFormik({
     initialValues: {
@@ -33,7 +32,7 @@ const CreateEventPage = () => {
       endDate: "",
       avaliableSeats: "",
       location: "",
-      eventCategoriesId: "",
+      category: "",
       thumbnail: null,
     },
     onSubmit: async (values) => {
@@ -59,37 +58,6 @@ const CreateEventPage = () => {
       thumbnailRef.current.value = "";
     }
   };
-  if (isLoading)
-    return (
-      <>
-        <section className="container mx-auto pt-2">
-          <Navbar />
-        </section>
-        <main className="container mx-auto max-w-4xl px-4">
-          <h1 className="mb-4 text-4xl font-semibold">
-            Create Event Categories
-          </h1>
-          <div className="flex items-center justify-center">
-            <p className="text-sm text-muted-foreground">Loading...</p>
-          </div>
-        </main>
-      </>
-    );
-
-  if (!eventCategories)
-    return (
-      <>
-        <section className="container mx-auto pt-2">
-          <Navbar />
-        </section>
-        <main className="container mx-auto max-w-4xl px-4">
-          <h1 className="mb-4 text-4xl font-semibold">
-            Create Event Categories
-          </h1>
-          <p>Error</p>
-        </main>
-      </>
-    );
 
   return (
     <>
@@ -97,9 +65,7 @@ const CreateEventPage = () => {
         <Navbar />
       </section>
       <main className="container mx-auto max-w-4xl px-4">
-        <h1 className="mb-4 pt-5 text-4xl font-semibold">
-          Create Event Categories
-        </h1>
+        <h1 className="mb-4 pt-5 text-4xl font-semibold">Create Event</h1>
         <form className="mt-10 space-y-5" onSubmit={formik.handleSubmit}>
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="title">Title</Label>
@@ -117,31 +83,28 @@ const CreateEventPage = () => {
           </div>
 
           <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="eventCategoriesId">Category</Label>
+            <Label htmlFor="category">Category</Label>
             <Select
-              name="eventCategoriesId"
-              value={formik.values.eventCategoriesId}
-              onValueChange={(value) =>
-                formik.setFieldValue("eventCategoriesId", value)
-              }
+              name=""
+              value={formik.values.category}
+              onValueChange={(value) => formik.setFieldValue("category", value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
-                {eventCategories?.data.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.title}
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            {!!formik.touched.eventCategoriesId &&
-              !!formik.errors.eventCategoriesId && (
-                <div className="text-sm text-red-500">
-                  {formik.errors.eventCategoriesId}
-                </div>
-              )}
+            {!!formik.touched.category && !!formik.errors.category && (
+              <div className="text-sm text-red-500">
+                {formik.errors.category}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col space-y-1.5">
@@ -161,7 +124,7 @@ const CreateEventPage = () => {
           </div>
 
           <RichTextEditor
-            label="Full Description"
+            label="About Event"
             value={formik.values.full_description}
             onChange={(value: string) =>
               formik.setFieldValue("full_description", value)
@@ -174,7 +137,7 @@ const CreateEventPage = () => {
             <Input
               type="number"
               name="price"
-              placeholder="Price"
+              placeholder="Price "
               value={formik.values.price}
               onChange={(e) => {
                 const value = parseFloat(e.target.value);
@@ -186,7 +149,9 @@ const CreateEventPage = () => {
               min={0}
             />
             {!!formik.touched.price && !!formik.errors.price && (
-              <div className="text-sm text-red-500">{formik.errors.price}</div>
+              <div className="text-sm text-red-500">
+                {formik.errors.price}
+              </div>
             )}
           </div>
 

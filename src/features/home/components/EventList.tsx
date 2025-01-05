@@ -23,9 +23,9 @@ const EventList = () => {
 
   return (
     <>
-      <section className="mx-4 md:mx-32 py-20">
-        <h1 className="text-2xl md:text-3xl font-bold">Upcoming Events</h1>
-        <div className="mt-4 flex flex-col gap-4 pt-10 md:grid md:grid-cols-4">
+      <section className="mx-4 md:mx-16 py-20 ">
+        <h1 className="text-2xl font-bold md:text-3xl">Upcoming Events</h1>
+        <div className="mt-4 flex flex-col gap-2 pt-10 md:grid md:grid-cols-4">
           {data?.data.slice(0, 4).map((event, index) => {
             return <EventCard key={index} event={event} />;
           })}

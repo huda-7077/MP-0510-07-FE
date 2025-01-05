@@ -6,6 +6,7 @@ export interface User {
   profilePicture: string;
   role: string;
   referralCode: string;
+  points: number;
   createdAt: Date;
   updatedAt: Date;
 }

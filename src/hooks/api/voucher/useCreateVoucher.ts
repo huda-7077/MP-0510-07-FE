@@ -1,34 +1,35 @@
 "use client";
-
 import useAxios from "@/hooks/useAxios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-interface CreateEventCategoryPayload {
-  title: string;
-  description: string;
+interface CreateVoucherPayload {
+  eventId: number;
+  code: string;
+  discountValue: number;
+  startDate: string;
+  endDate: string;
 }
 
-const useCreateEventCategory = () => {
+export const useCreateVoucher = () => {
   const router = useRouter();
   const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: CreateEventCategoryPayload) => {
-      const { data } = await axiosInstance.post("/event-categories", payload);
+    mutationFn: async (payload: CreateVoucherPayload) => {
+      const { data } = await axiosInstance.post("/vouchers", payload);
       return data;
     },
+
     onSuccess: async () => {
-      toast.success("Create event categories success");
-      await queryClient.invalidateQueries({ queryKey: ["events"] });
+      toast.success("Create voucher success");
+      await queryClient.invalidateQueries({ queryKey: ["vouchers"] });
       router.push("/");
     },
     onError: (error: AxiosError<any>) => {
-      toast.error(error.response?.data.message || error.response?.data);
+      toast.error(error.response?.data || error.response?.data.message);
     },
   });
 };
-
-export default useCreateEventCategory;
