@@ -16,17 +16,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { EditProfileSchema } from "../schemas";
-import useUpdateProfile from "@/hooks/api/account/useUpdateProfile";
 import useGetProfile from "@/hooks/api/account/useGetProfile";
+import useUpdateProfile from "@/hooks/api/account/useUpdateProfile";
+import { EditProfileSchema } from "../schemas";
 import SkeletonProfile from "./SkeletonProfile";
-import { useSession } from "next-auth/react";
 
 const EditProfileForm = () => {
-  const { data: session, update: updateSession } = useSession();
-  const token = session?.user.token;
-  const { data, isPending: isPendingGet } = useGetProfile({ token });
-  const { mutateAsync: updateProfile, isPending } = useUpdateProfile(token!);
+  const { data, isPending: isPendingGet } = useGetProfile();
+  const { mutateAsync: updateProfile, isPending } = useUpdateProfile();
   const [selectedImage, setSelectedImage] = useState<string>("");
   const profilePictureRef = useRef<HTMLInputElement>(null);
 
@@ -38,7 +35,6 @@ const EditProfileForm = () => {
     validationSchema: EditProfileSchema,
     onSubmit: async (values) => {
       await updateProfile(values);
-      await updateSession(values);
     },
   });
 

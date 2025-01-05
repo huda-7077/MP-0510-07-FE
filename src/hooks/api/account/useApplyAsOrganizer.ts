@@ -15,7 +15,7 @@ interface UpdateProfilePayload {
   governmentId: File | null;
 }
 
-const useApplyAsOrganizer = (token: string) => {
+const useApplyAsOrganizer = () => {
   const router = useRouter();
   const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
@@ -34,11 +34,6 @@ const useApplyAsOrganizer = (token: string) => {
       const { data } = await axiosInstance.post(
         "/account/apply-as-organizer",
         updateProfileForm,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       );
       return data;
     },

@@ -1,10 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useFormik } from "formik";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -13,16 +9,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ChangePasswordSchema } from "../schemas";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import useChangePassword from "@/hooks/api/account/useChangePassword";
-import { useSession } from "next-auth/react";
+import { useFormik } from "formik";
+import { useState } from "react";
+import { ChangePasswordSchema } from "../schemas";
 
 export function ChangePasswordDialog() {
-  const { data: session } = useSession();
-  const token = session?.user.token;
   const [isOpen, setIsOpen] = useState(false);
 
-  const { mutateAsync: changePassword, isPending } = useChangePassword(token!);
+  const { mutateAsync: changePassword, isPending } = useChangePassword();
 
   const formik = useFormik({
     initialValues: {

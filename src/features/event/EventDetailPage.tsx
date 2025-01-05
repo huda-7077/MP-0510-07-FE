@@ -27,8 +27,6 @@ interface EventDetailPageProps {
 }
 
 const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
-  const session = useSession();
-
   const { data, isPending: isPendingGet } = useGetEvent(eventId);
 
   const [showTransactionForm, setShowTransactionForm] = useState(false);

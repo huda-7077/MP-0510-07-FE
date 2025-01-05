@@ -1,6 +1,6 @@
 "use client";
 
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode } from "react";
 
@@ -11,7 +11,13 @@ interface Transaction {
   quantity: number;
   pointsUsed: number;
   totalPrice: number;
-  status: "WAITING_FOR_PAYMENT" | "WAITING_FOR_ADMIN_CONFIRMATION" | "DONE" | "REJECTED" | "EXPIRED" | "CANCELED";
+  status:
+    | "WAITING_FOR_PAYMENT"
+    | "WAITING_FOR_ADMIN_CONFIRMATION"
+    | "DONE"
+    | "REJECTED"
+    | "EXPIRED"
+    | "CANCELED";
   paymentProof: string;
   createdAt: string;
   expiresAt: string;
@@ -46,11 +52,12 @@ interface ApiResponse {
 }
 
 const useGetTransaction = (id: number) => {
+  const { axiosInstance } = useAxios();
   return useQuery<ApiResponse>({
     queryKey: ["transaction", id],
     queryFn: async () => {
       const { data } = await axiosInstance.get<ApiResponse>(
-        `/transactions/${id}`
+        `/transactions/${id}`,
       );
       return data;
     },

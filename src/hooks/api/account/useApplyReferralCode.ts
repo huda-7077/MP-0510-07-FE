@@ -10,7 +10,7 @@ interface ApplyReferralCodePayload {
   referrerCode: String;
 }
 
-const useApplyReferralCode = (token: string) => {
+const useApplyReferralCode = () => {
   const router = useRouter();
   const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
@@ -19,11 +19,6 @@ const useApplyReferralCode = (token: string) => {
       const { data } = await axiosInstance.post(
         "/account/referrals/apply-code",
         payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       );
       return data;
     },

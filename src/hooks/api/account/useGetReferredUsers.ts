@@ -1,14 +1,13 @@
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { PageableResponse, PaginationQueries } from "@/types/pagination";
 import { Referral } from "@/types/referral";
 import { useQuery } from "@tanstack/react-query";
 
-interface GetReferredUsersQueries extends PaginationQueries {
-  token: string | undefined;
-}
+interface GetReferredUsersQueries extends PaginationQueries {}
 
 const useGetReferredUsers = (queries: GetReferredUsersQueries) => {
-  const { token, ...params } = queries;
+  const { axiosInstance } = useAxios();
+  const { ...params } = queries;
   return useQuery({
     queryKey: ["referrals", queries],
     queryFn: async () => {
@@ -16,14 +15,10 @@ const useGetReferredUsers = (queries: GetReferredUsersQueries) => {
         "/account/referrals",
         {
           params,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         },
       );
       return data;
     },
-    enabled: !!token,
   });
 };
 

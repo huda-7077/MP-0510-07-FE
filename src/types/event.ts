@@ -16,5 +16,5 @@ export interface Event {
   createdAt: string;
   updatedAt: string;
 
-  user: Pick<User, "id" | "fullname" | "email" | "points">
+  user: Pick<User, "id" | "fullname" | "email" | "points">;
 }

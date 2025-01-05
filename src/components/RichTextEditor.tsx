@@ -1,54 +1,62 @@
 "use client";
-import { FC } from "react";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
-import { Label } from "./ui/label";
 
-const QuillEditor = dynamic(() => import("react-quill"), {
-  ssr: false,
-  loading: () => <p>Loading editor...</p>,
-});
+import { FC, useRef, useEffect } from "react";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
 interface RichTextEditorProps {
   label: string;
   value: string;
-  isError: boolean;
   onChange: (value: string) => void;
+  onBlur: () => void;
+  error?: string;
+  touched?: boolean;
 }
 
 const RichTextEditor: FC<RichTextEditorProps> = ({
   label,
   value,
-  isError,
   onChange,
+  onBlur,
+  error,
+  touched,
 }) => {
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ header: 1 }, { header: 2 }],
-        [{ list: "ordered" }, { list: "bullet" }],
-        [{ indent: "-1" }, { indent: "+1" }],
-        [{ size: ["small", false, "large", "huge"] }],
-        [{ color: [] }, { background: [] }],
-        [{ font: [] }],
-        [{ align: [] }],
-      ],
-    },
-  };
+  const editorRef = useRef<HTMLDivElement | null>(null);
+  const quillInstance = useRef<Quill | null>(null);
+  useEffect(() => {
+    if (editorRef.current && !quillInstance.current) {
+      quillInstance.current = new Quill(editorRef.current, {
+        theme: "snow",
+        modules: {
+          toolbar: [
+            ["bold", "italic", "underline"],
+            [{ header: [1, 2, 3, false] }],
+            [{ list: "ordered" }, { list: "bullet" }],
+          ],
+        },
+      });
+
+      quillInstance.current.root.innerHTML = value;
+
+      quillInstance.current.on("text-change", () => {
+        if (quillInstance.current) {
+          const content = quillInstance.current.root.innerHTML;
+          onChange(content);
+        }
+      });
+    }
+  }, [value, onChange]);
 
   return (
-    <div className="flex flex-col space-y-1.5">
-      <Label>{label}</Label>
-      <QuillEditor
-        modules={quillModules}
-        value={value}
-        onChange={onChange}
-        className="h-[300px] pb-16"
+    <div className="flex flex-col space-y-2">
+      <label className="text-sm">{label}</label>
+      <div
+        ref={editorRef}
+        className="border-gray-300"
+        onBlur={onBlur}
+        style={{ height: "200px" }}
       />
-
-      {isError && (
-        <div className="text-xs text-red-500">This field is required</div>
-      )}
+      {error && touched && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 };

@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const { data } = useSession();
 
-  const user = data?.user
+  const user = data?.user;
 
   const logout = () => {
     signOut();
@@ -53,12 +53,8 @@ const Navbar = () => {
             )}
             {!!user?.id && (
               <>
-                <p onClick={() => router.push("/create-event")}>create event</p>
-                <p onClick={() => router.push("/create-promotion")}>create promotion</p>
                 <p onClick={logout}>Logout</p>
-
                 <Link href="/account">
-
                   <div className="flex h-8 w-8 items-center justify-center rounded-full border-2">
                     <UserIcon className="h-5 w-5" />
                   </div>
@@ -83,6 +79,9 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link href="/account">Profile</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/explore">Explore</Link>
+                </DropdownMenuItem>
                 {!user?.id && (
                   <DropdownMenuItem>
                     <Link href="/login">Sign In</Link>
@@ -90,9 +89,14 @@ const Navbar = () => {
                 )}
                 {!!user?.id && (
                   <>
-                    <DropdownMenuItem>
-                      <p onClick={() => router.push("/write")}>Write</p>
-                    </DropdownMenuItem>
+                    {user?.role === "ADMIN" ||
+                      (user?.role === "ORGANIZER" && (
+                        <DropdownMenuItem>
+                          <p onClick={() => router.push("/dashboard")}>
+                            Dashboard
+                          </p>
+                        </DropdownMenuItem>
+                      ))}
                     <DropdownMenuItem>
                       <p onClick={logout}>Logout</p>
                     </DropdownMenuItem>

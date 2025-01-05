@@ -4,8 +4,10 @@ import {
   Calendar,
   Command,
   CreditCard,
+  Disc2,
   Edit,
   LayoutDashboard,
+  Percent,
   User,
 } from "lucide-react";
 import * as React from "react";
@@ -49,29 +51,35 @@ const data = {
   navOrganizer: [
     {
       title: "Dashboard",
-      url: "/dashboard/organizer",
+      url: "/dashboard",
       icon: LayoutDashboard,
       isActive: true,
       items: [],
     },
     {
       title: "Events",
-      url: "/dashboard/organizer/events",
+      url: "/dashboard/events",
       icon: Calendar,
       items: [
-        {
-          title: "Create Event",
-          url: "#",
-        },
-        {
-          title: "Create Vouchers",
-          url: "#",
-        },
+        // {
+        //   title: "Create Event",
+        //   url: "#",
+        // },
+        // {
+        //   title: "Create Vouchers",
+        //   url: "#",
+        // },
       ],
     },
+    // {
+    //   title: "Vouchers",
+    //   url: "/dashboard/vouchers",
+    //   icon: Percent,
+    //   items: [],
+    // },
     {
       title: "Payments",
-      url: "/dashboard/organizer/payments",
+      url: "/dashboard/payments",
       icon: CreditCard,
       items: [],
     },
@@ -81,10 +89,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = useSession();
   const user = session?.user;
-  const token = user?.token;
-  const { data: profile } = useGetProfile({
-    token,
-  });
+  const { data: profile } = useGetProfile();
 
   const profileData = {
     name: profile?.fullname || "",
@@ -93,7 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar variant="inset" {...props} className="border-r-sidebar">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

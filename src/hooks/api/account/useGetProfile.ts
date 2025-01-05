@@ -1,22 +1,15 @@
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { User } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 
-interface GetProfileQueries {
-  token: string | undefined;
-}
-const useGetProfile = ({ token }: GetProfileQueries) => {
+const useGetProfile = () => {
+  const { axiosInstance } = useAxios();
   return useQuery({
-    queryKey: ["account", token],
+    queryKey: ["account"],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<User>("/account/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axiosInstance.get<User>("/account/profile");
       return data;
     },
-    enabled: !!token,
   });
 };
 

@@ -23,12 +23,10 @@ import useRejectRole from "@/hooks/api/user-lists/useRejectRole";
 
 interface RequestOrganizerDialogProps {
   organizerData: Organizer;
-  token: string;
 }
 
 const RequestOrganizerDialog: React.FC<RequestOrganizerDialogProps> = ({
   organizerData,
-  token,
 }) => {
   const [isRejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [isAcceptDialogOpen, setAcceptDialogOpen] = useState(false);
@@ -57,9 +55,9 @@ const RequestOrganizerDialog: React.FC<RequestOrganizerDialogProps> = ({
   };
 
   const { mutateAsync: updateRole, isPending: isUpdateRolePending } =
-    useUpdateRole(token);
+    useUpdateRole();
   const { mutateAsync: rejectRole, isPending: isRejectRolePending } =
-    useRejectRole(token);
+    useRejectRole();
 
   const handleAccept = (userId: number) => {
     updateRole({ userIdTarget: userId });
@@ -71,7 +69,7 @@ const RequestOrganizerDialog: React.FC<RequestOrganizerDialogProps> = ({
   };
 
   return (
-    <div>
+    <>
       <Dialog open={isRequestDialogOpen} onOpenChange={setIsRequestDialogOpen}>
         <DialogTrigger asChild>
           <Button
@@ -165,7 +163,7 @@ const RequestOrganizerDialog: React.FC<RequestOrganizerDialogProps> = ({
         onAccept={() => handleAccept(organizerData.userId)}
         isPending={isUpdateRolePending}
       />
-    </div>
+    </>
   );
 };
 
