@@ -21,7 +21,8 @@ import {
 import Image from "next/image";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import useGetEventCategories from "@/hooks/api/event-categories/useGetEventCategories";
+import { categories } from "@/utils/categories";
+
 import { cities } from "@/utils/cities";
 import { format } from "date-fns";
 import { useFormik } from "formik";
@@ -44,7 +45,6 @@ const EditEventDialog: FC<EditEventDialogProps> = ({ eventId }) => {
   const [isEditEventDialogOpen, setIsEditEventDialogOpen] = useState(false);
   const { mutateAsync: editEvent, isPending } = useEditEvent(eventId);
   const { data } = useGetEvent(eventId);
-  const { data: eventCategories, isLoading } = useGetEventCategories({});
   const [selectedImage, setSelectedImage] = useState<string>("");
   const thumbnailRef = useRef<HTMLInputElement>(null);
 
@@ -58,7 +58,7 @@ const EditEventDialog: FC<EditEventDialogProps> = ({ eventId }) => {
       endDate: "",
       avaliableSeats: "",
       location: "",
-      eventCategory: "",
+      category: "",
       thumbnail: null,
     },
     validationSchema: EditEventSchema,
@@ -78,7 +78,7 @@ const EditEventDialog: FC<EditEventDialogProps> = ({ eventId }) => {
         endDate: format(new Date(data.endDate), "yyyy-MM-dd"),
         avaliableSeats: data.avaliableSeats.toString(),
         location: data.location,
-        eventCategory: data.eventCategory,
+        category: data.category,
         thumbnail: null,
       });
       setSelectedImage(data.thumbnail || "");
@@ -143,31 +143,27 @@ const EditEventDialog: FC<EditEventDialogProps> = ({ eventId }) => {
             </div>
 
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="eventCategory">Category</Label>
               <Select
-                name="eventCategory"
-                value={formik.values.eventCategory}
+                name="category"
+                value={formik.values.category}
                 onValueChange={(value) =>
-                  formik.setFieldValue("eventCategory", value)
+                  formik.setFieldValue("category", value)
                 }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {eventCategories && eventCategories.data
-                    ? eventCategories.data.map((category) => (
-                        <SelectItem key={category.id} value={category.title}>
-                          {category.title}
-                        </SelectItem>
-                      ))
-                    : null}
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-              {!!formik.touched.eventCategory &&
-              !!formik.errors.eventCategory ? (
+              {!!formik.touched.category && !!formik.errors.category ? (
                 <div className="text-xs text-red-500">
-                  {formik.errors.eventCategory}
+                  {formik.errors.category}
                 </div>
               ) : null}
             </div>

@@ -22,7 +22,11 @@ const useLogin = () => {
     onSuccess: async (data) => {
       toast.success("Login Success");
       await signIn("credentials", { ...data, redirect: false });
-      router.replace("/");
+      if (data.role === "ADMIN" || data.role === "ORGANIZER") {
+        router.replace("/dashboard");
+      } else {
+        router.replace("/");
+      }
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data);

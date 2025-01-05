@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 interface EditEventPayload {
-  eventCategory: string;
+  category: string;
   title: string;
   description: string;
   full_description: string;
@@ -35,7 +35,7 @@ const useEditEvent = (id: number) => {
       editEventForm.append("endDate", payload.endDate);
       editEventForm.append("avaliableSeats", payload.avaliableSeats);
       editEventForm.append("location", payload.location);
-      editEventForm.append("eventCategory", payload.eventCategory);
+      editEventForm.append("category", payload.category);
 
       if (payload.thumbnail) {
         editEventForm.append("thumbnail", payload.thumbnail);

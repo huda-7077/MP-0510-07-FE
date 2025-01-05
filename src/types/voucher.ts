@@ -7,6 +7,7 @@ export interface Voucher {
   event: Event;
   code: string;
   discountValue: number;
+  discountPercentage: number;
   startDate: Date;
   endDate: Date;
   createdAt: Date;

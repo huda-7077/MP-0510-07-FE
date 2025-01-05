@@ -5,7 +5,7 @@ export interface Event {
   title: string;
   description: string;
   full_description: string;
-  eventCategory: string;
+  category: string;
   userId: number;
   thumbnail: string;
   price: number;
@@ -16,5 +16,5 @@ export interface Event {
   createdAt: string;
   updatedAt: string;
 
-  user: Pick<User, "id" | "fullname" | "email">
+  user: Pick<User, "id" | "fullname" | "email" | "points">;
 }

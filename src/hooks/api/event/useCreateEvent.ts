@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 interface CreateEventPayload {
-  eventCategory: string;
   title: string;
   description: string;
   full_description: string;
@@ -16,6 +15,7 @@ interface CreateEventPayload {
   endDate: string;
   avaliableSeats: string;
   location: string;
+  category: string;
   thumbnail: File | null;
 }
 
@@ -35,8 +35,7 @@ const useCreateEvent = () => {
       createEventForm.append("endDate", payload.endDate);
       createEventForm.append("avaliableSeats", payload.avaliableSeats);
       createEventForm.append("location", payload.location);
-      createEventForm.append("eventCategory", payload.eventCategory);
-
+      createEventForm.append("category", payload.category);
       if (payload.thumbnail) {
         createEventForm.append("thumbnail", payload.thumbnail);
       }

@@ -17,6 +17,7 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import { useDebounceValue } from "usehooks-ts";
 import CreateEventDialog from "./components/CreateEventDialog";
 import TableEvents from "./components/TableEvents";
+import CreatePromotionDialog from "./components/CreatePromotionDialog";
 const EventsPage = () => {
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [search, setSearch] = useQueryState("search", { defaultValue: "" });
@@ -64,9 +65,11 @@ const EventsPage = () => {
             <div className="flex flex-col items-center justify-between gap-2 md:flex-row">
               <h1 className="hidden text-2xl font-semibold md:block">Events</h1>
 
-              <div className="flex flex-row-reverse items-center gap-4 md:flex-row">
-                <CreateEventDialog />
-                {/* <CreateEventCategoriesDialog /> */}
+              <div className="flex flex-col-reverse items-center gap-4 md:flex-row">
+                <div className="flex items-center gap-8">
+                  <CreateEventDialog />
+                  <CreatePromotionDialog />
+                </div>
                 <Input
                   placeholder="Search..."
                   className="w-64"

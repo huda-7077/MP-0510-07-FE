@@ -22,8 +22,9 @@ import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 
 import { Textarea } from "@/components/ui/textarea";
-import useGetEventCategories from "@/hooks/api/event-categories/useGetEventCategories";
 import useCreateEvent from "@/hooks/api/event/useCreateEvent";
+import { categories } from "@/utils/categories";
+
 import { cities } from "@/utils/cities";
 import { useFormik } from "formik";
 import { Plus } from "lucide-react";
@@ -38,7 +39,6 @@ const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
 const CreateEventDialog = () => {
   const [isCreateEventDialogOpen, setIsCreateEventDialogOpen] = useState(false);
   const { mutateAsync: createEvent, isPending } = useCreateEvent();
-  const { data: eventCategories, isLoading } = useGetEventCategories({});
 
   const formik = useFormik({
     initialValues: {
@@ -50,7 +50,7 @@ const CreateEventDialog = () => {
       endDate: "",
       avaliableSeats: "",
       location: "",
-      eventCategory: "",
+      category: "",
       thumbnail: null,
     },
     validationSchema: CreateEventSchema,
@@ -93,7 +93,7 @@ const CreateEventDialog = () => {
             onClick={() => setIsCreateEventDialogOpen(true)}
           >
             <Plus />
-            <p className="hidden md:block">Event</p>
+            <p>Event</p>
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-screen-md">
@@ -125,31 +125,28 @@ const CreateEventDialog = () => {
             </div>
 
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="eventCategory">Category</Label>
+              <Label htmlFor="category">Category</Label>
               <Select
-                name="eventCategory"
-                value={formik.values.eventCategory}
+                name="category"
+                value={formik.values.category}
                 onValueChange={(value) =>
-                  formik.setFieldValue("eventCategory", value)
+                  formik.setFieldValue("category", value)
                 }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {eventCategories && eventCategories.data
-                    ? eventCategories.data.map((category) => (
-                        <SelectItem key={category.id} value={category.title}>
-                          {category.title}
-                        </SelectItem>
-                      ))
-                    : null}
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-              {!!formik.touched.eventCategory &&
-              !!formik.errors.eventCategory ? (
+              {!!formik.touched.category && !!formik.errors.category ? (
                 <div className="text-xs text-red-500">
-                  {formik.errors.eventCategory}
+                  {formik.errors.category}
                 </div>
               ) : null}
             </div>

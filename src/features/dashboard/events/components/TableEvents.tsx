@@ -29,7 +29,7 @@ const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
   };
   return (
     <div className="mx-auto overflow-x-scroll rounded-md border">
-      <div className="flex min-h-[65vh] md:min-h-[55vh]">
+      <div className="flex min-h-[60vh] md:min-h-[55vh]">
         <Table className="w-full">
           <TableHeader>
             <TableRow className="bg-muted">
@@ -87,7 +87,7 @@ const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
                   {event.location}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm">
-                  {event.eventCategory}
+                  {event.category}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm">
                   {format(event.startDate, "dd-MM-yyyy")}

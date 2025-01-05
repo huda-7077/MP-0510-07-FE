@@ -85,18 +85,29 @@ const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
                   {index + 1 + data.meta.take * (page - 1)}
                 </TableCell>
                 <TableCell className="p-1">
-                  <Link href={payment.paymentProof} target="_blank">
-                    <div className="relative flex h-16 flex-row items-center justify-center">
+                  <div className="relative flex h-16 flex-row items-center justify-center">
+                    {payment.paymentProof ? (
+                      <Link href={payment.paymentProof} target="_blank">
+                        <Image
+                          src={payment.paymentProof}
+                          alt={`Transaction ${payment.id} image`}
+                          fill
+                          priority
+                          sizes="100%"
+                          className="h-full w-full rounded-md object-cover"
+                        />
+                      </Link>
+                    ) : (
                       <Image
-                        src={payment.paymentProof}
-                        alt={`Transaction ${payment.id} image`}
+                        src=""
+                        alt={`No image`}
                         fill
                         priority
                         sizes="100%"
                         className="h-full w-full rounded-md object-cover"
                       />
-                    </div>
-                  </Link>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm">
                   {payment.eventId && (
