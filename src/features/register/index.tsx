@@ -129,7 +129,7 @@ const RegisterPage = () => {
 
                   <Button
                     type="submit"
-                    className="mt-4 w-full bg-[#80AE44] text-black hover:bg-[#9AC265]"
+                    className="mt-4 w-full"
                     disabled={isPending}
                   >
                     {isPending ? "loading..." : "Register"}

@@ -185,7 +185,6 @@ const TransactionDetail: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 p-6">
-            
             <p>
               <strong>Name:</strong> {data.user.fullname}
             </p>

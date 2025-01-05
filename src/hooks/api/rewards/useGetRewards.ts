@@ -1,22 +1,15 @@
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { Rewards } from "@/types/rewards";
 import { useQuery } from "@tanstack/react-query";
 
-interface GetRewardsQuery {
-  token: string | undefined;
-}
-const useGetRewards = ({ token }: GetRewardsQuery) => {
+const useGetRewards = () => {
+  const { axiosInstance } = useAxios();
   return useQuery({
-    queryKey: ["rewards", token],
+    queryKey: ["rewards"],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<Rewards>("/rewards", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axiosInstance.get<Rewards>("/rewards");
       return data;
     },
-    enabled: !!token,
   });
 };
 

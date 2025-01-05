@@ -2,22 +2,28 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ChangeRewardsSkeleton = () => {
   return (
-    <div className="flex flex-col bg-gray-50 font-sans dark:bg-gray-900 dark:text-white">
-      <div className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-700 dark:bg-gray-800">
-        <div className="flex items-center justify-between">
+    <div className="flex min-h-screen flex-col bg-background font-sans text-foreground">
+      <header className="border-b bg-background shadow-sm">
+        <div className="flex h-16 items-center gap-4 px-6">
+          <Skeleton className="h-6 w-6" />
+          <Skeleton className="h-6 w-px" />
           <Skeleton className="h-6 w-32" />
         </div>
-      </div>
+      </header>
 
-      <div className="mt-4 flex-1 rounded-md bg-white p-6 font-sans shadow dark:bg-gray-800">
-        <div className="space-y-4">
-          <div className="grid auto-rows-min gap-4">
-            <Skeleton className="h-52 w-full" />
-            <Skeleton className="h-52 w-full" />
-            <Skeleton className="h-10 w-full" />
+      <main className="flex-grow md:p-6">
+        <div className="rounded-xl p-0 md:bg-muted/30 md:p-8 md:shadow-2xl dark:md:bg-muted/50">
+          <div className="mt-4 w-screen space-y-4 px-3 md:mt-0 md:w-full md:px-0">
+            <div className="space-y-4">
+              <div className="grid auto-rows-min gap-4">
+                <Skeleton className="h-48 w-full" />
+                <Skeleton className="h-48 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

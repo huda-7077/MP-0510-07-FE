@@ -30,7 +30,7 @@ const useCreateEvent = () => {
       createEventForm.append("title", payload.title);
       createEventForm.append("description", payload.description);
       createEventForm.append("full_description", payload.full_description);
-      createEventForm.append("price", payload.price.toString());
+      createEventForm.append("price", payload.price);
       createEventForm.append("startDate", payload.startDate);
       createEventForm.append("endDate", payload.endDate);
       createEventForm.append("avaliableSeats", payload.avaliableSeats);
@@ -46,7 +46,7 @@ const useCreateEvent = () => {
     onSuccess: async () => {
       toast.success("Create event success");
       await queryClient.invalidateQueries({ queryKey: ["events"] });
-      router.push("/");
+      router.push("/dashboard/events");
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data.message || error.response?.data);

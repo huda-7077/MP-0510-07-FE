@@ -56,13 +56,13 @@ const ExploreList = () => {
           </Button>
           <Button
             className={`${
-              selectedCategory === "Sports"
+              selectedCategory === "Sport"
                 ? "bg-gray-800 text-white"
                 : "bg-gray-200"
             }`}
-            onClick={() => handleCategoryChange("Sports")}
+            onClick={() => handleCategoryChange("Sport")}
           >
-            Sports
+            Sport
           </Button>
           <Button
             className={`${

@@ -18,7 +18,6 @@ import RequestOrganizerDialog from "./RequestOrganizerDialog";
 interface TableUserListsProps {
   data: { data: User[]; meta: { take: number } };
   page: number;
-  token: string | undefined;
 }
 
 const getBadgeRoleVariant = (status: string) => {
@@ -45,86 +44,90 @@ const getBadgeStatusVariant = (status: string) => {
   }
 };
 
-const TableUserLists: FC<TableUserListsProps> = ({ data, page, token }) => {
+const TableUserLists: FC<TableUserListsProps> = ({ data, page }) => {
   return (
-    <Table className="w-full border border-gray-200 text-sm dark:border-gray-700">
-      <TableHeader>
-        <TableRow className="bg-gray-100 dark:bg-gray-700">
-          <TableHead className="px-4 py-2 text-left text-gray-700 dark:text-gray-200">
-            No
-          </TableHead>
-          <TableHead className="px-4 py-2 text-left text-gray-700 dark:text-gray-200">
-            Name
-          </TableHead>
-          <TableHead className="px-4 py-2 text-left text-gray-700 dark:text-gray-200">
-            Email
-          </TableHead>
-          <TableHead className="px-4 py-2 text-left text-gray-700 dark:text-gray-200">
-            Role
-          </TableHead>
-          <TableHead className="px-4 py-2 text-left text-gray-700 dark:text-gray-200">
-            Status
-          </TableHead>
-          <TableHead className="px-4 py-2 text-left text-gray-700 dark:text-gray-200">
-            Request
-          </TableHead>
-          <TableHead className="px-4 py-2 text-left text-gray-700 dark:text-gray-200">
-            CreatedAt
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.data.map((user, index) => (
-          <TableRow
-            key={index}
-            className="hover:bg-gray-50 dark:hover:bg-gray-600"
-          >
-            <TableCell className="border-t px-4 py-2 text-gray-600 dark:text-gray-300">
-              {index + 1 + data.meta.take * (page - 1)}
-            </TableCell>
-            <TableCell className="flex flex-row items-center gap-2 border-t px-4 py-2 text-gray-800 dark:text-white">
-              <Avatar className="h-8 w-8 items-center">
-                <AvatarImage src={user.profilePicture} alt={user.fullname} />
-                <AvatarFallback className="rounded-lg text-sm">
-                  CN
-                </AvatarFallback>
-              </Avatar>
-              <span className="">{user.fullname}</span>
-            </TableCell>
-            <TableCell className="border-t px-4 py-2 text-gray-600 dark:text-gray-300">
-              {user.email}
-            </TableCell>
-            <TableCell className="border-t px-4 py-2 text-gray-600 dark:text-gray-300">
-              <Badge
-                variant={getBadgeRoleVariant(user.role)}
-                className="h-6 rounded-full px-3 py-1 text-xs font-medium"
+    <div className="mx-auto overflow-x-scroll rounded-md border">
+      <div className="flex min-h-[60vh] md:min-h-[55vh]">
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow className="bg-muted">
+              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+                No
+              </TableHead>
+              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+                Name
+              </TableHead>
+              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+                Email
+              </TableHead>
+              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+                Role
+              </TableHead>
+              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+                Status
+              </TableHead>
+              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+                Request
+              </TableHead>
+              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+                CreatedAt
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.data.map((user, index) => (
+              <TableRow
+                key={index}
+                className="border-b transition-colors hover:bg-muted"
               >
-                {user.role}
-              </Badge>
-            </TableCell>
-            <TableCell className="border-t px-4 py-2">
-              <Badge
-                className="h-6 rounded-full px-3 py-1 font-medium"
-                variant={getBadgeStatusVariant(user.isDeleted.toString())}
-              >
-                {user.isDeleted ? "Inactive" : "Active"}
-              </Badge>
-            </TableCell>
-            <TableCell className="border-t px-4 py-2">
-              {user.organizers && (
-                <RequestOrganizerDialog
-                  organizerData={user.organizers}
-                  token={token!}
-                />
-              )}
-            </TableCell>
-            <TableCell className="border-t px-4 py-2">
-              {format(user.createdAt, "dd-MM-yyyy HH:mm:ss")}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+                <TableCell className="px-6 py-3 text-sm">
+                  {index + 1 + data.meta.take * (page - 1)}
+                </TableCell>
+                <TableCell className="flex flex-row items-center gap-2 px-6 py-2 text-sm">
+                  <Avatar className="flex h-8 w-8 items-center">
+                    <AvatarImage
+                      src={user.profilePicture}
+                      alt={user.fullname}
+                    />
+                    <AvatarFallback className="rounded-lg text-sm">
+                      CN
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="flex">{user.fullname}</span>
+                </TableCell>
+                <TableCell className="px-6 py-3 text-sm">
+                  {user.email}
+                </TableCell>
+                <TableCell className="px-6 py-3 text-sm">
+                  <Badge
+                    variant={getBadgeRoleVariant(user.role)}
+                    className="h-6 rounded-full px-3 py-1 text-xs font-medium"
+                  >
+                    {user.role}
+                  </Badge>
+                </TableCell>
+                <TableCell className="border-t px-4 py-2">
+                  <Badge
+                    className="h-6 rounded-full px-3 py-1 font-medium"
+                    variant={getBadgeStatusVariant(user.isDeleted.toString())}
+                  >
+                    {user.isDeleted ? "Inactive" : "Active"}
+                  </Badge>
+                </TableCell>
+                <TableCell className="border-t px-4 py-2">
+                  {user.organizers && (
+                    <RequestOrganizerDialog organizerData={user.organizers} />
+                  )}
+                </TableCell>
+                <TableCell className="border-t px-4 py-2">
+                  {format(user.createdAt, "dd-MM-yyyy HH:mm:ss")}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 };
 

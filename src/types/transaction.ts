@@ -35,6 +35,5 @@ export enum TransactionStatus {
   DONE = "DONE",
   REJECTED = "REJECTED",
   EXPIRED = "EXPIRED",
-  CANCELED = "CANCELED"
+  CANCELED = "CANCELED",
 }
-

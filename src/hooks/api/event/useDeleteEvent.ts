@@ -2,7 +2,7 @@
 import useAxios from "@/hooks/useAxios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 const useDeleteEvent = () => {
@@ -17,7 +17,7 @@ const useDeleteEvent = () => {
     onSuccess: async () => {
       toast.success("Delete event success");
       await queryClient.invalidateQueries({ queryKey: ["events"] });
-      router.replace("/");
+      router.replace("/dashboard/events");
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data);

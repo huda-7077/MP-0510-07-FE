@@ -26,7 +26,7 @@ export const useCreateVoucher = () => {
     onSuccess: async () => {
       toast.success("Create voucher success");
       await queryClient.invalidateQueries({ queryKey: ["vouchers"] });
-      router.push("/");
+      router.push("/dashboard/events");
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data || error.response?.data.message);

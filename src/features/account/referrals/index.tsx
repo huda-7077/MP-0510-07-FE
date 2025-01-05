@@ -24,21 +24,18 @@ import { ApplyReferralCodeSchema } from "../schemas";
 import useGetReferredBy from "@/hooks/api/account/useGetReferredBy";
 
 const ReferralProgramPage = () => {
-  const { data: session, update: updateSession } = useSession();
-  const token = session?.user.token;
+  const { data: session } = useSession();
   const [referralCode, setReferralCode] = useState("");
-  const { data: referredBy, isPending: referredByPending } = useGetReferredBy({
-    token,
-  });
+  const { data: referredBy, isPending: referredByPending } = useGetReferredBy();
 
   const {
     mutateAsync: applyReferralCode,
     isPending: applyReferralCodePending,
-  } = useApplyReferralCode(token!);
+  } = useApplyReferralCode();
 
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
 
-  const { data, isPending } = useGetReferredUsers({ token, page });
+  const { data, isPending } = useGetReferredUsers({ page });
 
   const formik = useFormik({
     initialValues: {
@@ -47,7 +44,6 @@ const ReferralProgramPage = () => {
     validationSchema: ApplyReferralCodeSchema,
     onSubmit: async (values) => {
       await applyReferralCode(values);
-      await updateSession();
     },
   });
 

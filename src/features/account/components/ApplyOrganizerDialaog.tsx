@@ -1,11 +1,6 @@
 "use client";
 
-import { ChangeEvent, useRef, useState } from "react";
-import { useFormik } from "formik";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -14,19 +9,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ApplyOrganizerSchema } from "../schemas";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import useApplyAsOrganizer from "@/hooks/api/account/useApplyAsOrganizer";
+import { useFormik } from "formik";
+import Image from "next/image";
+import { ChangeEvent, useRef, useState } from "react";
+import { ApplyOrganizerSchema } from "../schemas";
 
 export function ApplyOrganizerDialog() {
-  const { data: session } = useSession();
-  const token = session?.user.token;
   const [isOpen, setIsOpen] = useState(false);
-
-  const { mutateAsync: applyAsOrganizer, isPending } = useApplyAsOrganizer(
-    token!,
-  );
+  const { mutateAsync: applyAsOrganizer, isPending } = useApplyAsOrganizer();
 
   const [selectedImage, setSelectedImage] = useState<string>("");
   const governmentIdRef = useRef<HTMLInputElement>(null);
@@ -167,34 +161,38 @@ export function ApplyOrganizerDialog() {
               </p>
             )}
           </div>
-          {selectedImage && (
-            <div className="relative mx-auto h-[210px] w-[330px]">
-              <Image
-                src={selectedImage}
-                alt="Government ID"
-                fill
-                className="rounded-md object-cover"
-              />
-              <button
-                type="button"
-                onClick={handleRemoveGovernmentId}
-                className="absolute right-2 top-2 rounded-full bg-white p-1 text-black hover:bg-gray-200"
-              >
-                &times;
-              </button>
-            </div>
-          )}
-          <Input
-            ref={governmentIdRef}
-            type="file"
-            accept="image/*"
-            onChange={handleGovernmentIdChange}
-            className="mx-auto max-w-xs"
-          />
-          <span className="block text-center text-xs text-muted-foreground">
-            Maximum file size: 2MB
-          </span>
-          <Button type="submit" disabled={isPending}>
+          <div className="space-y-1">
+            <Label htmlFor="governmentId">Government ID</Label>
+
+            {selectedImage && (
+              <div className="relative mx-auto h-[210px] w-[330px]">
+                <Image
+                  src={selectedImage}
+                  alt="Government ID"
+                  fill
+                  className="rounded-md object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveGovernmentId}
+                  className="absolute right-2 top-2 rounded-full bg-white p-1 text-black hover:bg-gray-200"
+                >
+                  &times;
+                </button>
+              </div>
+            )}
+            <Input
+              ref={governmentIdRef}
+              type="file"
+              accept="image/*"
+              onChange={handleGovernmentIdChange}
+              className="mx-auto max-w-xs"
+            />
+            <span className="block text-center text-xs text-muted-foreground">
+              Maximum file size: 2MB
+            </span>
+          </div>
+          <Button className="w-full" type="submit" disabled={isPending}>
             {isPending ? "Submitting..." : "Submit Application"}
           </Button>
         </form>

@@ -3,6 +3,7 @@
 import useAxios from "@/hooks/useAxios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -11,7 +12,7 @@ interface UpdateProfilePayload {
   profilePicture: File | null;
 }
 
-const useUpdateProfile = (token: string) => {
+const useUpdateProfile = () => {
   const router = useRouter();
   const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
@@ -25,15 +26,7 @@ const useUpdateProfile = (token: string) => {
         updateProfileForm.append("profilePicture", payload.profilePicture);
       }
 
-      const { data } = await axiosInstance.patch(
-        "/account",
-        updateProfileForm,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const { data } = await axiosInstance.patch("/account", updateProfileForm);
       return data;
     },
     onSuccess: async () => {

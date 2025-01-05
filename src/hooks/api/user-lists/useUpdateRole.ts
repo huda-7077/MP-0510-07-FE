@@ -1,6 +1,6 @@
 "use client";
 
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -10,17 +10,14 @@ interface UpdateRolePayload {
   userIdTarget: number;
 }
 
-const useUpdateRole = (token: string) => {
+const useUpdateRole = () => {
   const router = useRouter();
+  const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: UpdateRolePayload) => {
-      const { data } = await axiosInstance.patch("/user/user-lists", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axiosInstance.patch("/user/user-lists", payload);
       return data;
     },
     onSuccess: async (data) => {

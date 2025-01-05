@@ -1,6 +1,6 @@
 "use client";
 
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -11,21 +11,17 @@ interface RejectRolePayload {
   reasons: string;
 }
 
-const useRejectRole = (token: string) => {
+const useRejectRole = () => {
   const router = useRouter();
-
+  const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: RejectRolePayload) => {
-      const { data } = await axiosInstance.post("/user/reject", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axiosInstance.post("/user/reject", payload);
       return data;
     },
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.success("Reject role success");
       await queryClient.invalidateQueries({ queryKey: ["user-lists"] });
       router.refresh();
