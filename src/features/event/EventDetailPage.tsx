@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useGetEvent from "@/hooks/api/event/useGetEvent";
-import { Calendar, MapPin, Ticket, Tickets, Users } from "lucide-react";
+import { Calendar, MapPin, TicketIcon as Tickets, Users } from 'lucide-react';
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +20,8 @@ import { FC, useState } from "react";
 import ContentTabs from "./components/ContentTabs";
 import SkeletonEvent from "./components/SkeletonEvent";
 import { TransactionForm } from "./components/TransactionForm";
-import ReviewTabs from "./components/ReviewTabs";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from 'lucide-react';
 
 interface EventDetailPageProps {
   eventId: number;
@@ -28,16 +29,39 @@ interface EventDetailPageProps {
 
 const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
   const session = useSession();
-
-  const { data, isPending: isPendingGet } = useGetEvent(eventId);
-
+  const { data, isPending, error } = useGetEvent(eventId);
   const [showTransactionForm, setShowTransactionForm] = useState(false);
-  if (isPendingGet) {
+
+  if (isPending) {
     return <SkeletonEvent />;
   }
 
+  if (error) {
+    return (
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            {error.message || "An error occurred while fetching the event details. Please try again later."}
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
   if (!data) {
-    return <h1 className="mt-8 text-center">No data available.</h1>;
+    return (
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            No event data available. The event might not exist or has been removed.
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
   }
 
   return (
@@ -90,7 +114,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
                   }).format(data.price)}
                 </span>
               </div>
-
               <div className="flex items-center gap-2">
                 <span>{data.description}</span>
               </div>
@@ -107,7 +130,7 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
               </Link>
               {showTransactionForm && (
                 <TransactionForm
-                  event={{ ...data, id: parseInt(data.id) }} // Convert id to a number
+                  event={{ ...data, id: parseInt(data.id) }}
                   onClose={() => setShowTransactionForm(false)}
                 />
               )}
@@ -116,7 +139,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
         </div>
 
         <ContentTabs data={data} />
-        <ReviewTabs eventId={parseInt(data.id)} />
       </div>
       <Footer />
     </>
@@ -124,3 +146,4 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
 };
 
 export default EventDetailPage;
+
