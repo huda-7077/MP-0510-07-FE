@@ -1,19 +1,16 @@
 "use client";
 
 import {
-  BookDown,
   Calendar,
   Command,
   CreditCard,
+  Edit,
   LayoutDashboard,
-  LifeBuoy,
-  Send,
   User,
 } from "lucide-react";
 import * as React from "react";
 
 import { NavSecondary } from "@/components/NavSecondary";
-import { NavProfile } from "@/components/NavProfile";
 import {
   Sidebar,
   SidebarContent,
@@ -23,42 +20,30 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import useGetProfile from "@/hooks/api/account/useGetProfile";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { NavAdmin } from "./NavAdmin";
 import { NavOrganizer } from "./NavOrganizer";
+import { NavProfile } from "./NavProfile";
 import { ToggleDarkMode } from "./ToggleDarkMode";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navAdmin: [
     {
       title: "Dashboard",
-      url: "/dashboard/admin",
+      url: "/dashboard",
       icon: LayoutDashboard,
-      isActive: true,
-      items: [],
     },
     {
-      title: "Users",
-      url: "/dashboard/admin/users",
+      title: "User Lists",
+      url: "/dashboard/user-lists",
       icon: User,
-      items: [
-        {
-          title: "Organizer Requests",
-          url: "#",
-        },
-        {
-          title: "Change Points",
-          url: "#",
-        },
-        {
-          title: "Change Coupons",
-          url: "#",
-        },
-      ],
+    },
+    {
+      title: "Change Rewards",
+      url: "/dashboard/change-rewards",
+      icon: Edit,
     },
   ],
   navOrganizer: [
@@ -91,49 +76,58 @@ const data = {
       items: [],
     },
   ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession();
+  const user = session?.user;
+  const token = user?.token;
+  const { data: profile } = useGetProfile({
+    token,
+  });
+
+  const profileData = {
+    name: profile?.fullname || "",
+    email: profile?.email || "",
+    avatar: profile?.profilePicture || "",
+  };
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
+              <div className="flex items-center justify-between">
+                <Link href="/" className="flex gap-2">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                    <Command className="size-4" />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">StarTicket</span>
+                    <span className="truncate text-xs">Enterprise</span>
+                  </div>
+                </Link>
+                <div className="flex items-center">
+                  <ToggleDarkMode />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Suket Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-                <ToggleDarkMode />
-              </a>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavAdmin items={data.navAdmin} />
-        <NavOrganizer items={data.navOrganizer} />
+        {!!user?.id && user.role === "ADMIN" && (
+          <NavAdmin items={data.navAdmin} />
+        )}
+        {!!user?.id && user.role === "ORGANIZER" && (
+          <NavOrganizer items={data.navOrganizer} />
+        )}
 
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavProfile user={data.user} />
+        <NavProfile user={profileData} />
       </SidebarFooter>
     </Sidebar>
   );

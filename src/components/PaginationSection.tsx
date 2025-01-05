@@ -1,6 +1,4 @@
-
-import { PaginationMeta } from "@/types/pagination";
-import { FC } from "react";
+import React from "react";
 import {
   Pagination,
   PaginationContent,
@@ -10,41 +8,77 @@ import {
   PaginationPrevious,
 } from "./ui/pagination";
 
-interface PaginationSectionProps extends PaginationMeta {
+interface PaginationSectionProps {
+  page: number;
+  take: number;
+  total: number;
   onChangePage: (page: number) => void;
 }
 
-const PaginationSection: FC<PaginationSectionProps> = ({
+const PaginationSection: React.FC<PaginationSectionProps> = ({
   page,
   take,
   total,
   onChangePage,
 }) => {
-  const handlePrev = () => {
-    if (page > 1) {
-      onChangePage(page - 1);
-    }
-  };
+  const totalPages = Math.ceil(total / take);
 
-  const handleNext = () => {
-    if (page < Math.ceil(total / take)) {
-      onChangePage(page + 1);
+  const getPageNumbers = () => {
+    const pageNumbers: number[] = [];
+    const range = 3;
+    const start = Math.max(1, page - range);
+    const end = Math.min(totalPages, page + range);
+
+    for (let i = start; i <= end; i++) {
+      pageNumbers.push(i);
     }
+    return pageNumbers;
   };
 
   return (
-    <Pagination className="my-12">
-      <PaginationContent>
-        <PaginationItem className="cursor-pointer">
-          <PaginationPrevious onClick={handlePrev} />
+    <Pagination className="mt-6">
+      <PaginationContent className="flex items-center gap-2">
+        <PaginationItem>
+          <PaginationPrevious
+            className={`rounded px-3 py-2 ${
+              page === 1
+                ? "cursor-not-allowed text-gray-400"
+                : "hover:bg-gray-200"
+            }`}
+            onClick={page > 1 ? () => onChangePage(page - 1) : undefined}
+          >
+            Previous
+          </PaginationPrevious>
         </PaginationItem>
+
+        {getPageNumbers().map((pageNum) => (
+          <PaginationItem key={pageNum}>
+            <PaginationLink
+              className={`rounded px-3 py-2 ${
+                pageNum === page
+                  ? "bg-primary text-white dark:text-black dark:hover:bg-gray-700 dark:hover:text-white"
+                  : "hover:bg-gray-200 dark:hover:bg-gray-700"
+              }`}
+              onClick={() => onChangePage(pageNum)}
+            >
+              {pageNum}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
 
         <PaginationItem>
-          <PaginationLink>{page}</PaginationLink>
-        </PaginationItem>
-
-        <PaginationItem className="cursor-pointer">
-          <PaginationNext onClick={handleNext} />
+          <PaginationNext
+            className={`rounded px-3 py-2 ${
+              page === totalPages
+                ? "cursor-not-allowed text-gray-400"
+                : "hover:bg-gray-200"
+            }`}
+            onClick={
+              page < totalPages ? () => onChangePage(page + 1) : undefined
+            }
+          >
+            Next
+          </PaginationNext>
         </PaginationItem>
       </PaginationContent>
     </Pagination>
@@ -52,4 +86,3 @@ const PaginationSection: FC<PaginationSectionProps> = ({
 };
 
 export default PaginationSection;
-

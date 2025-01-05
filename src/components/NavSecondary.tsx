@@ -1,5 +1,6 @@
+"use client";
 import * as React from "react";
-import { type LucideIcon } from "lucide-react";
+import { LifeBuoy, LogOut, Send, User } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -8,31 +9,48 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-export function NavSecondary({
-  items,
-  ...props
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
-} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
+export function NavSecondary(
+  props: React.ComponentPropsWithoutRef<typeof SidebarGroup>,
+) {
+  const router = useRouter();
+  const handleLogout = () => {
+    signOut();
+    router.replace("/");
+  };
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="sm">
-                <a href={item.url}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="#">
+                <LifeBuoy />
+                <span>Support</span>
+              </Link>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild>
+              <Link href="#">
+                <Send />
+                <span>Feedback</span>
+              </Link>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild>
+              <Link href="/account">
+                <User />
+                <span>Account</span>
+              </Link>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild onClick={handleLogout}>
+              <Link href="/">
+                <LogOut />
+                <span>Logout</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

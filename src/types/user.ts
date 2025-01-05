@@ -1,3 +1,5 @@
+import { Organizer } from "./organizer";
+
 export interface User {
   id: number;
   email: string;
@@ -7,7 +9,8 @@ export interface User {
   role: string;
   referralCode: string;
   points: number;
+  isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
+  organizers: Organizer | null;
 }
-
