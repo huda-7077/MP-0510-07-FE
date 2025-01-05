@@ -1,6 +1,6 @@
 "use client";
 
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -11,20 +11,17 @@ interface UpdateRewardsPayload {
   couponsValue: number;
 }
 
-const useUpdateRewards = (token: string) => {
+const useUpdateRewards = () => {
   const router = useRouter();
+  const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (payload: UpdateRewardsPayload) => {
-      const { data } = await axiosInstance.patch("/rewards", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axiosInstance.patch("/rewards", payload);
       return data;
     },
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.success("Update rewards success");
       await queryClient.invalidateQueries({ queryKey: ["rewards"] });
 

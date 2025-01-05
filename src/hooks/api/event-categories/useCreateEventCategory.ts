@@ -22,8 +22,8 @@ const useCreateEventCategory = () => {
     },
     onSuccess: async () => {
       toast.success("Create event categories success");
-      await queryClient.invalidateQueries({ queryKey: ["events"] });
-      router.push("/");
+      await queryClient.invalidateQueries({ queryKey: ["event-categories"] });
+      router.refresh();
     },
     onError: (error: AxiosError<any>) => {
       toast.error(error.response?.data.message || error.response?.data);

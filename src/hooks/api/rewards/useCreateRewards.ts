@@ -1,6 +1,6 @@
 "use client";
 
-import { axiosInstance } from "@/lib/axios";
+import useAxios from "@/hooks/useAxios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
@@ -11,21 +11,16 @@ interface CreateRewardsPayload {
   couponsValue: number;
 }
 
-const useCreateRewards = (token: string) => {
+const useCreateRewards = () => {
   const router = useRouter();
-
+  const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async (payload: CreateRewardsPayload) => {
-      const { data } = await axiosInstance.post("/rewards", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { data } = await axiosInstance.post("/rewards", payload);
       return data;
     },
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast.success("Create rewards success");
       await queryClient.invalidateQueries({ queryKey: ["rewards"] });
       router.refresh();

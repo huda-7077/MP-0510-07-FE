@@ -53,10 +53,10 @@ const Navbar = () => {
             )}
             {!!user?.id && (
               <>
-                <p onClick={() => router.push("/create-event")}>create event</p>
+                {/* <p onClick={() => router.push("/create-event")}>create event</p>
                 <p onClick={() => router.push("/create-event-categories")}>
                   create event categories
-                </p>
+                </p> */}
                 <p onClick={logout}>Logout</p>
 
                 <Link href="/account">
@@ -92,7 +92,7 @@ const Navbar = () => {
                 {!!user?.id && (
                   <>
                     <DropdownMenuItem>
-                      <p onClick={() => router.push("/write")}>Write</p>
+                      <p onClick={() => router.push("/dashboard")}>Dashboard</p>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <p onClick={logout}>Logout</p>

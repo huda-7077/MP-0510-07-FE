@@ -76,11 +76,7 @@ const LoginPage = () => {
                       </p>
                     ) : null}
                   </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-[#80AE44] text-black hover:bg-[#9AC265]"
-                    disabled={isPending}
-                  >
+                  <Button type="submit" className="w-full" disabled={isPending}>
                     {isPending ? "loading..." : "Login"}
                   </Button>
 

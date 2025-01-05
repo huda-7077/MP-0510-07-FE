@@ -36,11 +36,11 @@ const PaginationSection: React.FC<PaginationSectionProps> = ({
   };
 
   return (
-    <Pagination className="mt-6">
-      <PaginationContent className="flex items-center gap-2">
+    <Pagination className="my-5">
+      <PaginationContent className="flex items-center gap-1 md:gap-2">
         <PaginationItem>
           <PaginationPrevious
-            className={`rounded px-3 py-2 ${
+            className={`flex h-6 rounded px-3 py-2 text-xs md:h-9 md:text-sm ${
               page === 1
                 ? "cursor-not-allowed text-gray-400"
                 : "hover:bg-gray-200"
@@ -54,7 +54,7 @@ const PaginationSection: React.FC<PaginationSectionProps> = ({
         {getPageNumbers().map((pageNum) => (
           <PaginationItem key={pageNum}>
             <PaginationLink
-              className={`rounded px-3 py-2 ${
+              className={`flex h-6 w-6 rounded px-3 py-2 text-xs md:h-9 md:w-9 md:text-sm ${
                 pageNum === page
                   ? "bg-primary text-white dark:text-black dark:hover:bg-gray-700 dark:hover:text-white"
                   : "hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -68,7 +68,7 @@ const PaginationSection: React.FC<PaginationSectionProps> = ({
 
         <PaginationItem>
           <PaginationNext
-            className={`rounded px-3 py-2 ${
+            className={`flex h-6 rounded px-3 py-2 text-xs md:h-9 md:text-sm ${
               page === totalPages
                 ? "cursor-not-allowed text-gray-400"
                 : "hover:bg-gray-200"

@@ -1,20 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { ChangePasswordDialog } from "../components/ChangePasswordDialog";
-import { ApplyOrganizerDialog } from "../components/ApplyOrganizerDialaog";
-import { useSession } from "next-auth/react";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import useGetProfile from "@/hooks/api/account/useGetProfile";
+import { useEffect, useState } from "react";
+import { ApplyOrganizerDialog } from "../components/ApplyOrganizerDialaog";
+import { ChangePasswordDialog } from "../components/ChangePasswordDialog";
 import SkeletonSettings from "../components/SkeletonSettings";
 
 const AccountSettingsPage = () => {
   const [notifications, setNotifications] = useState(false);
-  const { data: session, update: updateSession } = useSession();
-  const token = session?.user.token;
-  const { data, isPending: isPendingGet } = useGetProfile({ token });
+  const { data, isPending: isPendingGet } = useGetProfile();
 
   const [userRole, setUserRole] = useState("");
   const [isUser, setIsUser] = useState(false);
@@ -34,6 +31,19 @@ const AccountSettingsPage = () => {
       }
     }
   }, [data]);
+
+  function getRole(role: string) {
+    switch (role) {
+      case "USER":
+        return "user";
+      case "ORGANIZER":
+        return "organizer";
+      case "ADMIN":
+        return "admin";
+      default:
+        return "secondary";
+    }
+  }
 
   return (
     <main>
@@ -62,7 +72,7 @@ const AccountSettingsPage = () => {
                 <Label>User Roles</Label>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary">{userRole}</Badge>
+                <Badge variant={getRole(userRole)}>{userRole}</Badge>
               </div>
             </div>
             {isUser && !isOrganizer && (
@@ -74,6 +84,11 @@ const AccountSettingsPage = () => {
             {isOrganizer && (
               <p className="text-sm text-gray-500">
                 You are already an organizer. Thank you for your contribution!
+              </p>
+            )}
+            {isAdmin && !isOrganizer && (
+              <p className="text-sm text-gray-500">
+                You are an admin. You have full access to the platform.
               </p>
             )}
           </div>

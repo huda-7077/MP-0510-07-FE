@@ -15,8 +15,8 @@ export function NavProfile({
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <div className="flex items-center gap-2 rounded-md bg-sidebar-accent text-sidebar-accent-foreground">
-          <Avatar className="h-10 w-10 rounded-lg">
+        <div className="flex items-center gap-2 rounded-md">
+          <Avatar className="h-10 w-10 rounded-2xl">
             <AvatarImage src={user.avatar} alt={user.name} />
             <AvatarFallback className="rounded-lg">CN</AvatarFallback>
           </Avatar>
