@@ -8,6 +8,7 @@ export interface User {
   profilePicture: string;
   role: string;
   referralCode: string;
+  points: number;
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;

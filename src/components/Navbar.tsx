@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const { data } = useSession();
 
-  const user = data?.user;
+  const user = data?.user
 
   const logout = () => {
     signOut();
@@ -29,7 +29,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 bg-opacity-90 backdrop-blur">
       <div className="container mx-auto max-w-7xl">
         <div className="flex items-center justify-between px-4 py-4">
-          <Link href="/" className="font-serif text-4xl font-bold">
+          <Link href="/" className="font-serif text-3xl font-bold">
             StarTicket
           </Link>
 
@@ -54,12 +54,11 @@ const Navbar = () => {
             {!!user?.id && (
               <>
                 <p onClick={() => router.push("/create-event")}>create event</p>
-                <p onClick={() => router.push("/create-event-categories")}>
-                  create event categories
-                </p>
+                <p onClick={() => router.push("/create-promotion")}>create promotion</p>
                 <p onClick={logout}>Logout</p>
 
                 <Link href="/account">
+
                   <div className="flex h-8 w-8 items-center justify-center rounded-full border-2">
                     <UserIcon className="h-5 w-5" />
                   </div>

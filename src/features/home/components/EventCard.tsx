@@ -48,11 +48,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
             <MapPin className="h-4 w-4" />
             <span>{event.location}</span>
           </div>
-          <div>
-            <Badge variant={event.price === 0 ? "secondary" : "default"}>
-              {event.price === 0 ? "Free" : `$${event.price}`}
-            </Badge>
-          </div>
+          
         </div>
       </CardContent>
       <CardFooter className="flex items-center justify-between">

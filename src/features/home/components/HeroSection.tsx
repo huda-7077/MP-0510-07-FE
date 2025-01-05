@@ -52,7 +52,7 @@ export function HeroSection() {
       <CarouselContent>
         {events.data.map((event) => (
           <CarouselItem key={event.id}>
-            <div className="relative mx-auto h-[300px] max-w-7xl md:h-[600px]">
+            <div className="relative mx-auto h-[300px] max-w-6xl md:h-[600px]">
               <Image
                 src={event.thumbnail}
                 alt={event.title}
