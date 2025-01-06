@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import useGetEventsByOrganizerId from "@/hooks/api/event/useGetEventsByOrganizerId";
+import useGetEventsByOrganizerId from "@/hooks/api/dashboard-organizer/useGetEventsByOrganizerId";
 import Link from "next/link";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useDebounceValue } from "usehooks-ts";

@@ -1,5 +1,6 @@
 import { Coupon } from "./coupon";
 import { Event } from "./event";
+import { TransactionStatus } from "./transaction";
 import { User } from "./user";
 import { Voucher } from "./voucher";
 
@@ -18,15 +19,8 @@ export interface Transaction {
   pointsUsed: number;
   totalPrice: number;
   quantity: number;
+  acceptedAt: Date;
   createdAt: Date;
   updatedAt: Date;
   expiresAt: Date;
-}
-
-enum TransactionStatus {
-  PENDING = "PENDING",
-  SUCCESS = "SUCCESS",
-  FAILED = "FAILED",
-  CANCELED = "CANCELED",
-  REFUNDED = "REFUNDED",
 }

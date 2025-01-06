@@ -1,6 +1,5 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -10,17 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Event } from "@/types/event";
-import { User } from "@/types/user";
 import { format } from "date-fns";
 import Image from "next/image";
-import { FC, useState } from "react";
+import { FC } from "react";
 
-import useDeleteEvent from "@/hooks/api/event/useDeleteEvent";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import useUpdateTransaction from "@/hooks/api/transaction/useUpdateTransaction";
 import { Transaction } from "@/types/transactions";
-import useRejectTransaction from "@/hooks/api/transaction-dummy/useRejectTransaction";
-import RejectTransactionDialog from "./RejectTransaction";
 import Link from "next/link";
+import AcceptTransactionDialog from "./AcceptTransaction";
+import RejectTransactionDialog from "./RejectTransaction";
 // import RequestOrganizerDialog from "./RequestOrganizerDialog";
 
 interface TablePaymentsProps {
@@ -28,11 +31,44 @@ interface TablePaymentsProps {
   page: number;
 }
 
-const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
-  const { mutateAsync: rejectTransaction, isPending } = useRejectTransaction();
+const statusMapping = {
+  WAITING_FOR_PAYMENT: { variant: "warning", label: "Pending Payment" },
+  WAITING_FOR_ADMIN_CONFIRMATION: {
+    variant: "warning",
+    label: "Pending Approval",
+  },
+  DONE: { variant: "success", label: "Approved" },
+  REJECTED: { variant: "admin", label: "Rejected" },
+  EXPIRED: { variant: "admin", label: "Expired" },
+  CANCELED: { variant: "admin", label: "Canceled" },
+} as const;
 
-  const handleReject = (id: number) => {
-    rejectTransaction(id);
+const TransactionStatus = ({ status }: { status: string }) => {
+  const { variant, label } =
+    statusMapping[status as keyof typeof statusMapping] || {};
+  return variant && label ? (
+    <Badge className="rounded-xl text-center" variant={variant}>
+      {label}
+    </Badge>
+  ) : null;
+};
+
+const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
+  const { mutateAsync: updateTransaction, isPending } = useUpdateTransaction();
+
+  const handleReject = (transactionId: number) => {
+    updateTransaction({
+      transactionId,
+      isRejected: true,
+      isAccepted: false,
+    });
+  };
+  const handleAccept = (transactionId: number) => {
+    updateTransaction({
+      transactionId,
+      isRejected: false,
+      isAccepted: true,
+    });
   };
 
   console.log(data.data);
@@ -43,35 +79,35 @@ const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
         <Table className="w-full">
           <TableHeader>
             <TableRow className="bg-muted">
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 No
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Payment Proof
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Event
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Email
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Quantity
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Coupon Used
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Voucher Used
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Points Used
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Status
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
-                Select
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
+                Action
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -81,7 +117,7 @@ const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
                 key={index}
                 className="border-b transition-colors hover:bg-muted"
               >
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {index + 1 + data.meta.take * (page - 1)}
                 </TableCell>
                 <TableCell className="p-1">
@@ -109,74 +145,72 @@ const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
                     )}
                   </div>
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {payment.eventId && (
                     <>
                       <p>{payment.event?.title}</p>
                     </>
                   )}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {payment.userId && (
                     <>
                       <p>{payment.user?.email}</p>
                     </>
                   )}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {payment.quantity}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {payment.couponId && (
                     <>
                       <p>{payment.coupon?.discountValue}</p>
                     </>
                   )}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {payment.voucherId && (
                     <>
                       <p>{payment.voucher?.discountValue}</p>
                     </>
                   )}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {payment.pointsUsed}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
-                  {payment.status}
+                <TableCell className="px-6 py-3 text-center text-sm">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <TransactionStatus status={payment.status} />
+                      </TooltipTrigger>
+                      {payment.status === "DONE" && (
+                        <TooltipContent>
+                          <p>
+                            Accepted at :{" "}
+                            {format(payment.acceptedAt, "dd/MM/yyyy HH:mm:ss")}
+                          </p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  </TooltipProvider>
                 </TableCell>
                 <TableCell className="px-6 py-3 text-sm">
-                  {payment.id && (
-                    <>
-                      {/* <EditEventDialog token={token} eventId={Number(event.id)} /> */}
-                      <RejectTransactionDialog
-                        onReject={() => handleReject(payment.id)}
-                        isPending={isPending}
-                      />
-                    </>
-                  )}
+                  {payment.id &&
+                    payment.status === "WAITING_FOR_ADMIN_CONFIRMATION" && (
+                      <div className="flex gap-2">
+                        <RejectTransactionDialog
+                          onReject={() => handleReject(payment.id)}
+                          isPending={isPending}
+                        />
+                        <AcceptTransactionDialog
+                          onAccept={() => handleAccept(payment.id)}
+                          isPending={isPending}
+                        />
+                      </div>
+                    )}
                 </TableCell>
-
-                {/* <TableCell className="border-t px-4 py-2">
-              <Badge
-                className="h-6 rounded-full px-3 py-1 font-medium"
-                variant={getBadgeStatusVariant(event.isDeleted.toString())}
-              >
-                {event.isDeleted ? "Inactive" : "Active"}
-              </Badge>
-            </TableCell> */}
-                {/* <TableCell className="border-t px-4 py-2">
-              {event.organizers && (
-              <RequestOrganizerDialog
-                organizerData={event.organizers}
-                token={token!}
-              />
-            )}
-            </TableCell> */}
-                {/* <TableCell className="border-t px-4 py-2">
-              {format(event.createdAt, "dd-MM-yyyy HH:mm:ss")}
-            </TableCell> */}
               </TableRow>
             ))}
           </TableBody>

@@ -9,11 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useFormik } from "formik";
+import { X } from "lucide-react";
 import React, { useState } from "react";
-import * as Yup from "yup";
 
 interface RejectTransactionDialogProps {
   onReject: () => void;
@@ -30,18 +27,18 @@ const RejectTransactionDialog: React.FC<RejectTransactionDialogProps> = ({
     <Dialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <DialogTrigger asChild>
         <Button
-          size={"sm"}
-          variant={"destructive"}
+          size={"icon"}
+          variant={"failed"}
           onClick={() => setDeleteDialogOpen(true)}
         >
-          Reject
+          <X />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Reject Request</DialogTitle>
           <DialogDescription>
-            Please provide a reason for rejecting this request.
+            Are you sure you want to reject this request?
           </DialogDescription>
         </DialogHeader>
 
