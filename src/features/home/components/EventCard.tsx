@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Event } from "@/types/event";
 import { format } from "date-fns";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
@@ -21,45 +21,69 @@ interface EventCardProps {
 
 const EventCard: FC<EventCardProps> = ({ event }) => {
   return (
-    <Card>
-      <CardHeader>
-        <div className="relative h-[220px] w-full overflow-hidden rounded-lg">
+    <Card className="group h-full overflow-hidden transition-all duration-300 hover:border-emerald-200">
+      <CardHeader className="p-0">
+        <div className="relative h-[220px] w-full overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-0" />
           <Image
             src={event.thumbnail}
-            alt="thumnail"
+            alt={event.title}
             fill
-            className="object-cover"
+            className="transform object-cover transition-transform duration-500 group-hover:scale-105"
           />
+          <div className="absolute right-3 top-3">
+            <Badge className="bg-emerald-500 text-white hover:bg-emerald-600">
+              {event.avaliableSeats} seats left
+            </Badge>
+          </div>
         </div>
-        <div className="flex items-start justify-between">
-          <CardTitle className="text-xl">{event.title}</CardTitle>
-        </div>
-        <CardDescription>{event.description}</CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-grow">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            {format(event.startDate, "dd/MM/yyyy")} -{" "}
-            {format(event.endDate, "dd/MM/yyyy")}
-          </div>
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
-            <span>{event.location}</span>
+      <div className="p-5">
+        <CardTitle className="line-clamp-1 text-xl font-bold tracking-tight text-gray-900">
+          {event.title}
+        </CardTitle>
+        
+        <CardDescription className="mt-2 line-clamp-2 text-sm text-gray-600">
+          {event.description}
+        </CardDescription>
+
+        <CardContent className="mt-4 space-y-3 p-0">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Calendar className="h-4 w-4 text-emerald-500" />
+            <span>
+              {format(event.startDate, "MMM dd, yyyy")} - {format(event.endDate, "MMM dd, yyyy")}
+            </span>
           </div>
           
-        </div>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between">
-        <span className="text-sm">
-          {event.avaliableSeats} seats available
-        </span>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <MapPin className="h-4 w-4 text-emerald-500" />
+            <span className="line-clamp-1">{event.location}</span>
+          </div>
 
-        <Button>
-          <Link href={`/events/${event.id}`}>Details</Link>
-        </Button>
-      </CardFooter>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Users className="h-4 w-4 text-emerald-500" />
+            <span>
+              {event.avaliableSeats === 0 ? (
+                <span className="font-medium text-red-500">Sold Out</span>
+              ) : (
+                <span>{event.avaliableSeats} seats available</span>
+              )}
+            </span>
+          </div>
+        </CardContent>
+
+        <CardFooter className="mt-4 justify-between p-0">
+          <Link href={`/events/${event.id}`} className="w-full">
+            <Button 
+              className="w-full gap-2 bg-emerald-600 transition-all duration-300 hover:bg-emerald-700"
+            >
+              View Details
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </CardFooter>
+      </div>
     </Card>
   );
 };
