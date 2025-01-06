@@ -9,6 +9,7 @@ export interface Transaction {
   status: TransactionStatus;
   paymentProof: string | null;
   totalPrice: number;
+  acceptedAt: string | null;
   createdAt: string;
   updatedAt: string;
   expiresAt: string;
@@ -36,4 +37,17 @@ export enum TransactionStatus {
   REJECTED = "REJECTED",
   EXPIRED = "EXPIRED",
   CANCELED = "CANCELED",
+}
+
+export interface TransactionData {
+  revenue: string;
+  ticketsSold: string;
+  date: string;
+}
+
+export interface TransactionDataResponse {
+  data: TransactionData[];
+  totalRevenue: number;
+  totalTicketsSold: number;
+  totalEvents: number;
 }

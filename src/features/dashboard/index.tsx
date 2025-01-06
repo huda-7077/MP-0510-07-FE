@@ -1,3 +1,4 @@
+"use client";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,8 +9,12 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import DashboardOrganizerPage from "./organizer";
+import { useSession } from "next-auth/react";
 
 const DashboardPage = () => {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans text-foreground">
       <header className="border-b bg-background shadow-sm">
@@ -27,7 +32,8 @@ const DashboardPage = () => {
           </Breadcrumb>
         </div>
       </header>
-      <DashboardOrganizerPage />
+      {!!user?.id && user.role === "ADMIN" && <DashboardOrganizerPage />}
+      {!!user?.id && user.role === "ORGANIZER" && <DashboardOrganizerPage />}
     </div>
   );
 };
