@@ -7,12 +7,7 @@ import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 const EventList = () => {
-  const [page, setPage] = useState<number>(1);
-  const { data, isPending } = useGetEvents({ page });
-
-  const handlePageChange = (page: number) => {
-    setPage(page);
-  };
+  const { data, isPending } = useGetEvents({});
 
   if (isPending) {
     return (
@@ -30,8 +25,12 @@ const EventList = () => {
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
           <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-          <h2 className="mt-4 text-xl font-semibold text-gray-800">No Events Found</h2>
-          <p className="mt-2 text-gray-600">Check back later for upcoming events</p>
+          <h2 className="mt-4 text-xl font-semibold text-gray-800">
+            No Events Found
+          </h2>
+          <p className="mt-2 text-gray-600">
+            Check back later for upcoming events
+          </p>
         </div>
       </div>
     );
@@ -49,11 +48,10 @@ const EventList = () => {
             <p className="mt-2 text-lg text-gray-600">
               Don't miss out on these exciting upcoming events
             </p>
-              
           </div>
-          
+
           {/* Navigation Controls */}
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <button
               onClick={() => handlePageChange(Math.max(1, page - 1))}
               disabled={page === 1}
@@ -69,13 +67,14 @@ const EventList = () => {
             >
               <ChevronRight className="h-6 w-6" />
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Events Grid */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {data?.data.slice(0, 4).map((event, index) => (
-            <Link href={`/events/${event.id}`}
+            <Link
+              href={`/events/${event.id}`}
               key={index}
               className="group transform transition-all duration-300 hover:-translate-y-1"
             >
@@ -87,7 +86,7 @@ const EventList = () => {
           ))}
         </div>
 
-        {/* Mobile Pagination */}
+        {/* Mobile Pagination
         <div className="mt-8 flex items-center justify-center space-x-4 sm:hidden">
           <button
             onClick={() => handlePageChange(Math.max(1, page - 1))}
@@ -104,7 +103,7 @@ const EventList = () => {
           >
             Next
           </button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -11,17 +11,30 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import useGetEvent from "@/hooks/api/event/useGetEvent";
-import { Calendar, MapPin, TicketIcon as Tickets, Users } from 'lucide-react';
+import { 
+  Calendar, 
+  MapPin, 
+  TicketIcon, 
+  Users, 
+  AlertCircle,
+  Heart,
+  Share2,
+  Clock,
+  ArrowRight,
+  Star,
+  Building,
+  Phone
+} from 'lucide-react';
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { FC, useState } from "react";
 import ContentTabs from "./components/ContentTabs";
 import SkeletonEvent from "./components/SkeletonEvent";
 import { TransactionForm } from "./components/TransactionForm";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 
 interface EventDetailPageProps {
   eventId: number;
@@ -31,119 +44,203 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
   const session = useSession();
   const { data, isPending, error } = useGetEvent(eventId);
   const [showTransactionForm, setShowTransactionForm] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
-  if (isPending) {
-    return <SkeletonEvent />;
-  }
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    }).format(price);
+  };
 
-  if (error) {
+  if (isPending) return <SkeletonEvent />;
+
+  if (error || !data) {
     return (
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>
-            {error.message || "An error occurred while fetching the event details. Please try again later."}
-          </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
-
-  if (!data) {
-    return (
-      <div className="container mx-auto max-w-6xl px-4 py-8">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>
-            No event data available. The event might not exist or has been removed.
-          </AlertDescription>
+        <Alert variant="destructive" className="flex items-center gap-2">
+          <AlertCircle className="h-5 w-5" />
+          <div>
+            <AlertTitle className="text-lg font-semibold">Error</AlertTitle>
+            <AlertDescription className="mt-1">
+              {error?.message || "Event not found or has been removed."}
+            </AlertDescription>
+          </div>
         </Alert>
       </div>
     );
   }
 
   return (
-    <>
-      <section className="container mx-auto pt-2">
-        <Navbar />
-      </section>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <div className="mb-8 flex flex-wrap justify-between gap-6">
-          <div className="relative h-[200px] w-full overflow-hidden rounded-lg md:h-[500px] md:w-[700px]">
-            <Image
-              src={data.thumbnail}
-              alt={`Thumbnail for ${data.title}`}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <Card className="w-full md:h-[500px] md:w-[380px]">
-            <CardHeader>
-              <CardTitle className="text-2xl">{data.title}</CardTitle>
-              <CardDescription>
-                Organized by {data.user.fullname}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
-                <div>
-                  <div>{new Date(data.startDate).toLocaleDateString()}</div>
-                  <div className="text-sm text-gray-500">
-                    to {new Date(data.endDate).toLocaleDateString()}
+        <div className="mb-12 grid gap-8 lg:grid-cols-[1fr,380px]">
+          {/* Left Column - Image and Details */}
+          <div className="space-y-6">
+            {/* Image Section */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-2xl">
+              <Image
+                src={data.thumbnail}
+                alt={data.title}
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              
+              {/* Top Actions */}
+              <div className="absolute right-4 top-4 flex items-center gap-2">
+                <button
+                  onClick={() => setIsLiked(!isLiked)}
+                  className="group flex h-10 w-10 items-center justify-center rounded-full bg-black/20 backdrop-blur-sm transition-all hover:bg-white"
+                >
+                  <Heart 
+                    className={`h-5 w-5 transition-all group-hover:scale-110 group-hover:text-red-500 ${
+                      isLiked ? 'fill-red-500 text-red-500' : 'text-white'
+                    }`}
+                  />
+                </button>
+                <button className="flex h-10 w-10 items-center justify-center rounded-full bg-black/20 backdrop-blur-sm transition-all hover:bg-white hover:text-emerald-600">
+                  <Share2 className="h-5 w-5 text-white transition-all group-hover:scale-110 group-hover:text-emerald-600" />
+                </button>
+              </div>
+
+              {/* Bottom Badges */}
+              <div className="absolute bottom-4 left-4 flex flex-wrap items-center gap-2">
+                <Badge className="bg-emerald-500 text-white">
+                  {data.category}
+                </Badge>
+                <Badge className="flex items-center gap-1 bg-white/90 text-emerald-600">
+                  <Star className="h-3 w-3 fill-emerald-600" />
+                  4.8 (120 reviews)
+                </Badge>
+              </div>
+            </div>
+
+            {/* Event Title & Description */}
+            <div className="space-y-4">
+              <h1 className="text-3xl font-bold text-gray-900 md:text-4xl">
+                {data.title}
+              </h1>
+              <p className="text-gray-600">
+                {data.description}
+              </p>
+            </div>
+
+            {/* Organizer Info */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Building className="h-5 w-5 text-emerald-600" />
+                  Event Organizer
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-lg font-bold text-emerald-600">
+                    {data.user.fullname[0]}
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">{data.user.fullname}</h3>
+                    <p className="text-sm text-gray-600">Verified Organizer</p>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                <span>{data.location}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                <span>{data.avaliableSeats} seats available</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Tickets className="h-5 w-5" />
-                <span>
-                  Ticket Price:{" "}
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(data.price)}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>{data.description}</span>
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              <Link href={`/events/${data.id}`} className="w-full">
-                <Button
-                  size="icon"
-                  className="w-full rounded-xl bg-slate-900 p-4 text-lg font-medium text-white"
-                  onClick={() => setShowTransactionForm(true)}
-                >
-                  Book Now
-                </Button>
-              </Link>
-              {showTransactionForm && (
-                <TransactionForm
-                  event={{ ...data, id: parseInt(data.id) }}
-                  onClose={() => setShowTransactionForm(false)}
-                />
-              )}
-            </CardFooter>
-          </Card>
-        </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Phone className="h-4 w-4" />
+                  Contact organizer
+                </div>
+              </CardContent>
+            </Card>
 
-        <ContentTabs data={data} />
+            {/* Content Tabs */}
+            <ContentTabs data={data} />
+          </div>
+
+          {/* Right Column - Booking Card */}
+          <div className="lg:sticky lg:top-24">
+            <Card className="overflow-hidden border-2">
+              <CardHeader className="border-b bg-gray-50 pb-4">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-2xl font-bold text-gray-900">
+                    {formatPrice(data.price)}
+                  </CardTitle>
+                  <Badge className={data.avaliableSeats > 0 ? 'bg-emerald-500' : 'bg-red-500'}>
+                    {data.avaliableSeats > 0 ? `${data.avaliableSeats} seats left` : 'Sold Out'}
+                  </Badge>
+                </div>
+              </CardHeader>
+
+              <CardContent className="space-y-6 p-6">
+                {/* Date & Time */}
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
+                    <Calendar className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">Date & Time</div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <div>{format(new Date(data.startDate), "EEEE, MMMM d, yyyy")}</div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        {format(new Date(data.startDate), "h:mm a")}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
+                    <MapPin className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">Location</div>
+                    <div className="text-sm text-gray-600">{data.location}</div>
+                  </div>
+                </div>
+
+                {/* Availability */}
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
+                    <Users className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">Availability</div>
+                    <div className="text-sm text-gray-600">
+                      {data.avaliableSeats} seats remaining
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+
+              <CardFooter className="border-t bg-gray-50 p-6">
+                <Button
+                  className="group w-full gap-2 bg-emerald-600 py-6 text-lg hover:bg-emerald-700"
+                  onClick={() => setShowTransactionForm(true)}
+                  disabled={data.avaliableSeats === 0}
+                >
+                  {data.avaliableSeats > 0 ? 'Book Now' : 'Sold Out'}
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
       </div>
+
+      {/* Transaction Form Modal */}
+      {showTransactionForm && (
+        <TransactionForm
+          event={{ ...data, id: parseInt(data.id) }}
+          onClose={() => setShowTransactionForm(false)}
+        />
+      )}
+      
       <Footer />
-    </>
+    </div>
   );
 };
 
 export default EventDetailPage;
-

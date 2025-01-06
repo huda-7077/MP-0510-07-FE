@@ -7,6 +7,7 @@ import useGetEvents from "@/hooks/api/event/useGetEvents";
 import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { Search, Calendar, Filter } from "lucide-react";
+import Link from "next/link";
 
 const ExploreList = () => {
   const [search, setSearch] = useState<string>("");
@@ -130,13 +131,13 @@ const ExploreList = () => {
             </div>
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {data?.data.slice(0, 6).map((event, index) => (
-                <div
+                <Link href={`/events/${event.id}`}
                   key={index}
                   className="group relative transform rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
                 >
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                   <EventCard event={event} />
-                </div>
+                </Link>
               ))}
             </div>
           </div>

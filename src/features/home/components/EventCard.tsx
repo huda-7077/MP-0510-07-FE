@@ -73,16 +73,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
           </div>
         </CardContent>
 
-        <CardFooter className="mt-4 justify-between p-0">
-          <Link href={`/events/${event.id}`} className="w-full">
-            <Button 
-              className="w-full gap-2 bg-emerald-600 transition-all duration-300 hover:bg-emerald-700"
-            >
-              View Details
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-        </CardFooter>
+       
       </div>
     </Card>
   );
