@@ -24,7 +24,6 @@ import { Transaction } from "@/types/transactions";
 import Link from "next/link";
 import AcceptTransactionDialog from "./AcceptTransaction";
 import RejectTransactionDialog from "./RejectTransaction";
-// import RequestOrganizerDialog from "./RequestOrganizerDialog";
 
 interface TablePaymentsProps {
   data: { data: Transaction[]; meta: { take: number } };
@@ -134,14 +133,7 @@ const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
                         />
                       </Link>
                     ) : (
-                      <Image
-                        src=""
-                        alt={`No image`}
-                        fill
-                        priority
-                        sizes="100%"
-                        className="h-full w-full rounded-md object-cover"
-                      />
+                      <span>-</span>
                     )}
                   </div>
                 </TableCell>
@@ -163,17 +155,21 @@ const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
                   {payment.quantity}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-center text-sm">
-                  {payment.couponId && (
+                  {payment.couponId ? (
                     <>
                       <p>{payment.coupon?.discountValue}</p>
                     </>
+                  ) : (
+                    <span>-</span>
                   )}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-center text-sm">
-                  {payment.voucherId && (
+                  {payment.voucherId ? (
                     <>
                       <p>{payment.voucher?.discountValue}</p>
                     </>
+                  ) : (
+                    <span>-</span>
                   )}
                 </TableCell>
                 <TableCell className="px-6 py-3 text-center text-sm">
@@ -196,20 +192,22 @@ const TablePayments: FC<TablePaymentsProps> = ({ data, page }) => {
                     </Tooltip>
                   </TooltipProvider>
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {payment.id &&
-                    payment.status === "WAITING_FOR_ADMIN_CONFIRMATION" && (
-                      <div className="flex gap-2">
-                        <RejectTransactionDialog
-                          onReject={() => handleReject(payment.id)}
-                          isPending={isPending}
-                        />
-                        <AcceptTransactionDialog
-                          onAccept={() => handleAccept(payment.id)}
-                          isPending={isPending}
-                        />
-                      </div>
-                    )}
+                  payment.status === "WAITING_FOR_ADMIN_CONFIRMATION" ? (
+                    <div className="flex gap-2">
+                      <RejectTransactionDialog
+                        onReject={() => handleReject(payment.id)}
+                        isPending={isPending}
+                      />
+                      <AcceptTransactionDialog
+                        onAccept={() => handleAccept(payment.id)}
+                        isPending={isPending}
+                      />
+                    </div>
+                  ) : (
+                    <span>-</span>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -10,22 +11,34 @@ import {
 } from "@/components/ui/table";
 import useDeleteEvent from "@/hooks/api/event/useDeleteEvent";
 import { Event } from "@/types/event";
+import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
+import { BookUser } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import DeleteEventDialog from "./DeleteEventDialog";
 import EditEventDialog from "./EditEventDialog";
 
-interface TableUserListsProps {
+interface TableEventListsProps {
   data: { data: Event[]; meta: { take: number } };
   page: number;
 }
 
-const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
+const TableEvents: FC<TableEventListsProps> = ({ data, page }) => {
+  const router = useRouter();
+  const QueryClient = useQueryClient();
   const { mutateAsync: deleteEvent, isPending } = useDeleteEvent();
 
   const handleDelete = (id: number) => {
     deleteEvent(id);
+  };
+
+  const handleShowAttendees = async (id: number) => {
+    await QueryClient.invalidateQueries({
+      queryKey: ["transactions", "events"],
+    });
+    router.push(`/dashboard/events/${id}`);
   };
   return (
     <div className="mx-auto overflow-x-scroll rounded-md border">
@@ -108,6 +121,13 @@ const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
                       onDelete={() => handleDelete(Number(event.id))}
                       isPending={isPending}
                     />
+                    <Button
+                      size="icon"
+                      variant="warning"
+                      onClick={() => handleShowAttendees(Number(event.id))}
+                    >
+                      <BookUser />
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>
