@@ -4,10 +4,8 @@ import {
   Calendar,
   Command,
   CreditCard,
-  Disc2,
   Edit,
   LayoutDashboard,
-  Percent,
   User,
 } from "lucide-react";
 import * as React from "react";
@@ -54,34 +52,17 @@ const data = {
       url: "/dashboard",
       icon: LayoutDashboard,
       isActive: true,
-      items: [],
     },
     {
       title: "Events",
       url: "/dashboard/events",
       icon: Calendar,
-      items: [
-        // {
-        //   title: "Create Event",
-        //   url: "#",
-        // },
-        // {
-        //   title: "Create Vouchers",
-        //   url: "#",
-        // },
-      ],
     },
-    // {
-    //   title: "Vouchers",
-    //   url: "/dashboard/vouchers",
-    //   icon: Percent,
-    //   items: [],
-    // },
+
     {
       title: "Payments",
       url: "/dashboard/payments",
       icon: CreditCard,
-      items: [],
     },
   ],
 };
