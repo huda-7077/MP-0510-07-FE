@@ -2,30 +2,30 @@
 
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import useGetEvent from "@/hooks/api/event/useGetEvent";
-import { 
-  Calendar, 
-  MapPin, 
-  TicketIcon, 
-  Users, 
+import { format } from "date-fns";
+import {
   AlertCircle,
-  Heart,
-  Share2,
-  Clock,
   ArrowRight,
-  Star,
   Building,
-  Phone
+  Calendar,
+  Clock,
+  Heart,
+  MapPin,
+  Phone,
+  Share2,
+  Star,
+  Users
 } from 'lucide-react';
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -33,8 +33,6 @@ import { FC, useState } from "react";
 import ContentTabs from "./components/ContentTabs";
 import SkeletonEvent from "./components/SkeletonEvent";
 import { TransactionForm } from "./components/TransactionForm";
-import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
 
 interface EventDetailPageProps {
   eventId: number;
@@ -77,9 +75,7 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
       
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="mb-12 grid gap-8 lg:grid-cols-[1fr,380px]">
-          {/* Left Column - Image and Details */}
           <div className="space-y-6">
-            {/* Image Section */}
             <div className="relative aspect-video w-full overflow-hidden rounded-2xl">
               <Image
                 src={data.thumbnail}
@@ -90,7 +86,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               
-              {/* Top Actions */}
               <div className="absolute right-4 top-4 flex items-center gap-2">
                 <button
                   onClick={() => setIsLiked(!isLiked)}
@@ -107,7 +102,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
                 </button>
               </div>
 
-              {/* Bottom Badges */}
               <div className="absolute bottom-4 left-4 flex flex-wrap items-center gap-2">
                 <Badge className="bg-emerald-500 text-white">
                   {data.category}
@@ -119,7 +113,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
               </div>
             </div>
 
-            {/* Event Title & Description */}
             <div className="space-y-4">
               <h1 className="text-3xl font-bold text-gray-900 md:text-4xl">
                 {data.title}
@@ -129,7 +122,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
               </p>
             </div>
 
-            {/* Organizer Info */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
@@ -154,11 +146,9 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
               </CardContent>
             </Card>
 
-            {/* Content Tabs */}
             <ContentTabs data={data} />
           </div>
 
-          {/* Right Column - Booking Card */}
           <div className="lg:sticky lg:top-24">
             <Card className="overflow-hidden border-2">
               <CardHeader className="border-b bg-gray-50 pb-4">
@@ -173,7 +163,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
               </CardHeader>
 
               <CardContent className="space-y-6 p-6">
-                {/* Date & Time */}
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
                     <Calendar className="h-5 w-5 text-emerald-600" />
@@ -190,7 +179,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
                   </div>
                 </div>
 
-                {/* Location */}
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
                     <MapPin className="h-5 w-5 text-emerald-600" />
@@ -201,7 +189,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
                   </div>
                 </div>
 
-                {/* Availability */}
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
                     <Users className="h-5 w-5 text-emerald-600" />
@@ -230,7 +217,6 @@ const EventDetailPage: FC<EventDetailPageProps> = ({ eventId }) => {
         </div>
       </div>
 
-      {/* Transaction Form Modal */}
       {showTransactionForm && (
         <TransactionForm
           event={{ ...data, id: parseInt(data.id) }}

@@ -72,7 +72,6 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ eventId, isEventFinished 
 
   return (
     <div className="space-y-6">
-      {/* Review Summary */}
       <Card>
         <CardHeader>
           <CardTitle>Event Reviews</CardTitle>
@@ -92,7 +91,6 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ eventId, isEventFinished 
         </CardContent>
       </Card>
 
-      {/* Review Form */}
       <Card>
         <CardHeader>
           <CardTitle>Write a Review</CardTitle>
@@ -141,7 +139,6 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ eventId, isEventFinished 
         </CardContent>
       </Card>
 
-      {/* Reviews List */}
       <Card>
         <CardHeader>
           <CardTitle>All Reviews</CardTitle>

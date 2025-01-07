@@ -6,7 +6,6 @@ const Footer = () => {
     <footer className="w-full border-t border-gray-200 bg-white py-12">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
-          {/* Guarantee Section */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 shadow-sm">
@@ -29,7 +28,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Company Section */}
           <div className="space-y-6">
             <h4 className="text-lg font-semibold text-gray-900">Our Company</h4>
             <ul className="space-y-4">
@@ -45,7 +43,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Help Section */}
           <div className="space-y-6">
             <h4 className="text-lg font-semibold text-gray-900">Have Questions?</h4>
             <p className="group flex cursor-pointer items-center text-sm text-gray-600 transition-colors hover:text-emerald-600">
@@ -54,7 +51,6 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Location Section */}
           <div className="space-y-6">
             <h4 className="text-lg font-semibold text-gray-900">
               Live events all over the world
@@ -90,7 +86,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Footer Bottom */}
         <div className="mt-16 border-t border-gray-200 pt-8">
           <div className="space-y-4 text-sm text-gray-500">
             <p className="font-medium">© StarTicket 2024 Company Details</p>

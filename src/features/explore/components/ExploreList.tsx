@@ -49,7 +49,6 @@ const ExploreList = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Header Section */}
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             Discover Events
@@ -59,9 +58,7 @@ const ExploreList = () => {
           </p>
         </div>
 
-        {/* Filters Section */}
         <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg">
-          {/* Category Filter */}
           <div className="mb-6">
             <div className="flex items-center gap-2 pb-4">
               <Filter className="h-5 w-5 text-emerald-600" />
@@ -96,7 +93,6 @@ const ExploreList = () => {
             </div>
           </div>
 
-          {/* Search Input */}
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <Search className="h-5 w-5 text-emerald-600" />
@@ -110,7 +106,6 @@ const ExploreList = () => {
           </div>
         </div>
 
-        {/* Events Grid */}
         {!data.data.length ? (
           <div className="flex h-64 items-center justify-center rounded-2xl bg-white p-8 shadow-lg">
             <div className="text-center">
