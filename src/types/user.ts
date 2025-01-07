@@ -14,3 +14,15 @@ export interface User {
   updatedAt: Date;
   organizers: Organizer | null;
 }
+
+export interface UserResponse {
+  date: Date;
+  newUsers: number;
+}
+
+export interface UserDataResponse {
+  data: UserResponse[];
+  totalUsers: number;
+  totalOrganizers: number;
+  totalEvents: number;
+}

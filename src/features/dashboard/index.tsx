@@ -4,12 +4,12 @@ import {
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import DashboardOrganizerPage from "./organizer";
 import { useSession } from "next-auth/react";
+import DashboardAdminPage from "./admin";
+import DashboardOrganizerPage from "./organizer";
 
 const DashboardPage = () => {
   const { data: session } = useSession();
@@ -32,7 +32,7 @@ const DashboardPage = () => {
           </Breadcrumb>
         </div>
       </header>
-      {!!user?.id && user.role === "ADMIN" && <DashboardOrganizerPage />}
+      {!!user?.id && user.role === "ADMIN" && <DashboardAdminPage />}
       {!!user?.id && user.role === "ORGANIZER" && <DashboardOrganizerPage />}
     </div>
   );
