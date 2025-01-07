@@ -37,8 +37,7 @@ const useCreateTransaction = () => {
     },
 
     onError: (error: AxiosError<any>) => {
-        console.error("Error response:", error.response);
-        toast.error(error.response?.data?.message || "Failed to create transaction");
+        toast.error(error.response?.data?.message || error.response?.data);
       },
       
   });
