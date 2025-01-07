@@ -8,7 +8,7 @@ const EventAttendees = async ({ params }: { params: { id: string } }) => {
   if (session.user.role !== "ORGANIZER") {
     return redirect("/dashboard");
   }
-  return <EventAttendeesPage eventId={params.id} />;
+  return <EventAttendeesPage eventId={Number(params.id)} />;
 };
 
 export default EventAttendees;
