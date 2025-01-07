@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -10,22 +11,34 @@ import {
 } from "@/components/ui/table";
 import useDeleteEvent from "@/hooks/api/event/useDeleteEvent";
 import { Event } from "@/types/event";
+import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
+import { BookUser } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import DeleteEventDialog from "./DeleteEventDialog";
 import EditEventDialog from "./EditEventDialog";
 
-interface TableUserListsProps {
+interface TableEventListsProps {
   data: { data: Event[]; meta: { take: number } };
   page: number;
 }
 
-const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
+const TableEvents: FC<TableEventListsProps> = ({ data, page }) => {
+  const router = useRouter();
+  const QueryClient = useQueryClient();
   const { mutateAsync: deleteEvent, isPending } = useDeleteEvent();
 
   const handleDelete = (id: number) => {
     deleteEvent(id);
+  };
+
+  const handleShowAttendees = async (id: number) => {
+    await QueryClient.invalidateQueries({
+      queryKey: ["transactions", "events"],
+    });
+    router.push(`/dashboard/events/${id}`);
   };
   return (
     <div className="mx-auto overflow-x-scroll rounded-md border">
@@ -33,28 +46,31 @@ const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
         <Table className="w-full">
           <TableHeader>
             <TableRow className="bg-muted">
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 No
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Thumbnail
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Title
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Location
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Category
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
+                Avaliable Seats
+              </TableHead>
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Start Date
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 End Date
               </TableHead>
-              <TableHead className="px-6 py-3 text-sm font-medium text-muted-foreground">
+              <TableHead className="px-6 py-3 text-center text-sm font-medium text-muted-foreground">
                 Action
               </TableHead>
             </TableRow>
@@ -65,7 +81,7 @@ const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
                 key={index}
                 className="border-b transition-colors hover:bg-muted"
               >
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {index + 1 + data.meta.take * (page - 1)}
                 </TableCell>
                 <TableCell className="p-2">
@@ -80,28 +96,38 @@ const TableEvents: FC<TableUserListsProps> = ({ data, page }) => {
                     />
                   </div>
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {event.title}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {event.location}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {event.category}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
+                  {event.avaliableSeats}
+                </TableCell>
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {format(event.startDate, "dd-MM-yyyy")}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
+                <TableCell className="px-6 py-3 text-center text-sm">
                   {format(event.endDate, "dd-MM-yyyy")}
                 </TableCell>
-                <TableCell className="px-6 py-3 text-sm">
-                  <div className="flex space-x-2">
+                <TableCell className="px-6 py-3 text-center text-sm">
+                  <div className="flex justify-center space-x-2">
                     <EditEventDialog eventId={Number(event.id)} />
                     <DeleteEventDialog
                       onDelete={() => handleDelete(Number(event.id))}
                       isPending={isPending}
                     />
+                    <Button
+                      size="icon"
+                      variant="warning"
+                      onClick={() => handleShowAttendees(Number(event.id))}
+                    >
+                      <BookUser />
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>

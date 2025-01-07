@@ -61,11 +61,11 @@ export function CardCharts() {
   const [selectedData, setSelectedData] =
     useState<keyof typeof chartConfig>("revenue");
 
-  const { data } = useGetTransactionsData({
+  const { data, isPending } = useGetTransactionsData({
     orderBy: timeRange,
     year: year,
   });
-  const { data: userName } = useGetProfile();
+  const { data: userName, isPending: isPendingProfile } = useGetProfile();
 
   const filteredData =
     timeRange === "1y"
@@ -174,6 +174,7 @@ export function CardCharts() {
         totalTicketsSold={data?.totalTicketsSold}
         totalEvents={data?.totalEvents}
         userName={userName?.fullname}
+        isPending={isPending || isPendingProfile}
       />
 
       <div className="min-h-min flex-1 rounded-xl bg-muted/50">
