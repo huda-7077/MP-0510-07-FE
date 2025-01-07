@@ -73,7 +73,6 @@ const Navbar = () => {
     >
       <div className="container mx-auto max-w-7xl">
         <div className="flex h-20 items-center justify-between px-4">
-          {/* Logo */}
           <Link 
             href="/" 
             className="group flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5"
@@ -86,7 +85,6 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden items-center gap-1 md:flex">
             <NavLink href="/" icon={Home}>Home</NavLink>
             <NavLink href="/explore" icon={Compass}>Explore</NavLink>

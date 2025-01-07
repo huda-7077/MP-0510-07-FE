@@ -5,26 +5,21 @@ import { HeroSection } from "./components/HeroSection";
 const HomePage = () => {
   return (
     <>
-      {/* Main Content */}
       <main className="min-h-screen w-full">
-        {/* Navigation */}
         <div className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md">
           <div className="container mx-auto">
             <Navbar />
           </div>
         </div>
 
-        {/* Hero Section - Full Width */}
         <div className="w-full">
           <HeroSection />
         </div>
 
-        {/* Event List Section */}
         <div className="container mx-auto px-4">
           <EventList />
         </div>
 
-        {/* Footer Info - Optional */}
         <div className="container mx-auto mt-20 px-4 pb-10">
           <div className="rounded-xl bg-gray-50 p-6">
             <h2 className="mb-4 text-xl font-semibold text-gray-900">
