@@ -6,139 +6,144 @@ import EventCard from "@/features/home/components/EventCard";
 import useGetEvents from "@/hooks/api/event/useGetEvents";
 import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
+import { Search, Calendar, Filter } from "lucide-react";
+import Link from "next/link";
 
 const ExploreList = () => {
   const [search, setSearch] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>(""); // Kategori terpilih
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [debouncedSearch] = useDebounceValue(search, 500);
 
-  // API query dengan parameter `search` dan `category`
   const { data, isPending } = useGetEvents({
     search: debouncedSearch,
-    category: selectedCategory, // Kirim kategori ke API
+    category: selectedCategory,
   });
 
   const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category); // Update kategori terpilih
-    setSearch(""); // Reset pencarian
+    setSelectedCategory(category);
+    setSearch("");
   };
 
   if (isPending) {
-    return <h1 className="mt-8 text-center">Loading...</h1>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-green-50">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-emerald-600"></div>
+          <p className="text-lg font-medium text-gray-600">Loading events...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!data) {
-    return <h1 className="mt-8 text-center">No data.</h1>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-green-50">
+        <div className="rounded-lg bg-white p-8 text-center shadow-lg">
+          <p className="text-xl font-medium text-gray-800">No data available</p>
+          <p className="mt-2 text-gray-600">Please try again later</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <>
-      <section className="mx-5 py-4 md:mx-32 md:py-10">
-        {/* Filter Kategori */}
-        <div className="mb-6 grid max-w-3xl grid-cols-2 gap-4 space-x-4 md:grid-cols-7">
-          <Button
-            className={`${
-              selectedCategory === "" ? "bg-gray-800 text-white" : "bg-gray-200"
-            }`}
-            onClick={() => handleCategoryChange("")}
-          >
-            All
-          </Button>
-          <Button
-            className={`${
-              selectedCategory === "Music"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => handleCategoryChange("Music")}
-          >
-            Music
-          </Button>
-          <Button
-            className={`${
-              selectedCategory === "Sport"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => handleCategoryChange("Sport")}
-          >
-            Sport
-          </Button>
-          <Button
-            className={`${
-              selectedCategory === "Technology"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => handleCategoryChange("Technology")}
-          >
-            Technology
-          </Button>
-          <Button
-            className={`${
-              selectedCategory === "Business"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => handleCategoryChange("Business")}
-          >
-            Business
-          </Button>
-          <Button
-            className={`${
-              selectedCategory === "Science"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => handleCategoryChange("Science")}
-          >
-            Science
-          </Button>
-          <Button
-            className={`${
-              selectedCategory === "Art"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => handleCategoryChange("Art")}
-          >
-            Art
-          </Button>
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            Discover Events
+          </h1>
+          <p className="mt-4 text-lg text-gray-600">
+            Find and join amazing events happening around you
+          </p>
         </div>
 
-        {/* Input Pencarian */}
-        <Input
-          placeholder="Search for events"
-          className="my-4 max-w-4xl rounded-xl md:my-8"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
-        />
-
-        {/* Loading atau Data Kosong */}
-        {isPending && (
-          <div className="flex h-[30vh] items-center justify-center">
-            <h1 className="mt-8 text-center">Loading...</h1>
+        {/* Filters Section */}
+        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg">
+          {/* Category Filter */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 pb-4">
+              <Filter className="h-5 w-5 text-emerald-600" />
+              <h2 className="text-lg font-semibold text-gray-800">Categories</h2>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button
+                className={`transition-all duration-300 ${
+                  selectedCategory === ""
+                    ? "bg-emerald-600 text-white shadow-lg hover:bg-emerald-700"
+                    : "bg-green-50 text-gray-700 hover:bg-green-100"
+                }`}
+                onClick={() => handleCategoryChange("")}
+              >
+                All Events
+              </Button>
+              {["Music", "Sport", "Technology", "Business", "Science", "Art"].map(
+                (category) => (
+                  <Button
+                    key={category}
+                    className={`transition-all duration-300 ${
+                      selectedCategory === category
+                        ? "bg-emerald-600 text-white shadow-lg hover:bg-emerald-700"
+                        : "bg-green-50 text-gray-700 hover:bg-green-100"
+                    }`}
+                    onClick={() => handleCategoryChange(category)}
+                  >
+                    {category}
+                  </Button>
+                )
+              )}
+            </div>
           </div>
-        )}
 
+          {/* Search Input */}
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <Search className="h-5 w-5 text-emerald-600" />
+            </div>
+            <Input
+              placeholder="Search for events..."
+              className="w-full rounded-xl border-gray-200 bg-green-50 py-6 pl-10 pr-4 text-gray-900 shadow-sm transition-all duration-300 placeholder:text-gray-400 focus:border-emerald-600 focus:bg-white focus:ring-emerald-600"
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+            />
+          </div>
+        </div>
+
+        {/* Events Grid */}
         {!data.data.length ? (
-          <div className="flex h-[30vh] items-center justify-center">
-            <h1 className="mt-8 text-center">No data.</h1>
+          <div className="flex h-64 items-center justify-center rounded-2xl bg-white p-8 shadow-lg">
+            <div className="text-center">
+              <Calendar className="mx-auto h-12 w-12 text-emerald-600" />
+              <p className="mt-4 text-xl font-medium text-gray-800">No events found</p>
+              <p className="mt-2 text-gray-600">Try adjusting your filters</p>
+            </div>
           </div>
         ) : (
-          <>
-            <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">
-              Upcoming Events
-            </h1>
-            <div className="mt-2 grid grid-cols-1 gap-4 pt-10 md:mt-4 md:grid-cols-3">
-              {data?.data.slice(0, 6).map((event, index) => {
-                return <EventCard key={index} event={event} />;
-              })}
+          <div>
+            <div className="mb-8 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+                Upcoming Events
+              </h2>
+              <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-emerald-800">
+                {data.data.length} events found
+              </span>
             </div>
-          </>
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {data?.data.slice(0, 6).map((event, index) => (
+                <Link href={`/events/${event.id}`}
+                  key={index}
+                  className="group relative transform rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+                >
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                  <EventCard event={event} />
+                </Link>
+              ))}
+            </div>
+          </div>
         )}
-      </section>
-    </>
+      </div>
+    </div>
   );
 };
 
