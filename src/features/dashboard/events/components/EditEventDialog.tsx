@@ -109,8 +109,8 @@ const EditEventDialog: FC<EditEventDialogProps> = ({ eventId }) => {
       >
         <DialogTrigger asChild>
           <Button
-            className="bg-green-500"
-            variant={"outline"}
+            size="icon"
+            variant="success"
             onClick={() => setIsEditEventDialogOpen(true)}
           >
             <Edit2 />

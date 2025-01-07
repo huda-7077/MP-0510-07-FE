@@ -1,32 +1,37 @@
 "use client";
-import { useEffect } from "react";
-import { Input } from "@/components/ui/input";
 import PaginationSection from "@/components/PaginationSection";
-import { useSession } from "next-auth/react";
-import { parseAsInteger, useQueryState } from "nuqs";
-import { useDebounceValue } from "usehooks-ts";
-import useGetEventsByOrganizerId from "@/hooks/api/event/useGetEventsByOrganizerId";
-import TablePayments from "./components/TablePayments";
-import useGetTransactionsByOrganizerId from "@/hooks/api/transaction-dummy/useGetTransactionsByOrganizerId";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import useGetTransactionsByOrganizerId from "@/hooks/api/dashboard-organizer/useGetTransactionsByOrganizerId";
 import Link from "next/link";
+import { parseAsInteger, useQueryState } from "nuqs";
+import { useDebounceValue } from "usehooks-ts";
+import TablePayments from "./components/TablePayments";
 const PaymentsPage = () => {
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [search, setSearch] = useQueryState("search", { defaultValue: "" });
+  const [status, setStatus] = useQueryState("status", { defaultValue: "ALL" });
 
   const [debouncedValue] = useDebounceValue(search, 500);
 
   const { data, isPending } = useGetTransactionsByOrganizerId({
     page,
     search: debouncedValue,
+    status: status,
   });
 
   const onChangePage = (newPage: number) => {
@@ -66,9 +71,47 @@ const PaymentsPage = () => {
                 Payments
               </h1>
 
-              <div className="flex flex-row-reverse items-center gap-4 md:flex-row">
-                {/* <CreateEventDialog /> */}
-                {/* <CreateEventCategoriesDialog /> */}
+              <div className="flex flex-col-reverse items-center gap-4 md:flex-row">
+                <Select
+                  value={status}
+                  onValueChange={(value) => setStatus(value)}
+                >
+                  <SelectTrigger
+                    className="w-64 rounded-lg md:w-48"
+                    aria-label="Select status"
+                  >
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="ALL" className="rounded-lg">
+                      All
+                    </SelectItem>
+                    <SelectItem
+                      value="WAITING_FOR_ADMIN_CONFIRMATION"
+                      className="rounded-lg"
+                    >
+                      Pending Approval
+                    </SelectItem>
+                    <SelectItem
+                      value="WAITING_FOR_PAYMENT"
+                      className="rounded-lg"
+                    >
+                      Pending Payment
+                    </SelectItem>
+                    <SelectItem value="DONE" className="rounded-lg">
+                      Approved
+                    </SelectItem>
+                    <SelectItem value="REJECTED" className="rounded-lg">
+                      Rejected
+                    </SelectItem>
+                    <SelectItem value="EXPIRED" className="rounded-lg">
+                      Expired
+                    </SelectItem>
+                    <SelectItem value="CANCELED" className="rounded-lg">
+                      Canceled
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
                 <Input
                   placeholder="Search..."
                   className="w-64"

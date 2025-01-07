@@ -9,11 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useFormik } from "formik";
+import { Check } from "lucide-react";
 import React, { useState } from "react";
-import * as Yup from "yup";
 
 interface AcceptTransactionDialogProps {
   onAccept: () => void;
@@ -30,18 +27,18 @@ const AcceptTransactionDialog: React.FC<AcceptTransactionDialogProps> = ({
     <Dialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <DialogTrigger asChild>
         <Button
-          size={"sm"}
-          variant={"destructive"}
+          size={"icon"}
+          variant={"success"}
           onClick={() => setDeleteDialogOpen(true)}
         >
-          Accept
+          <Check />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Accept Request</DialogTitle>
           <DialogDescription>
-            Please provide a reason for accepting this request.
+            Are you sure you want to accept this request?
           </DialogDescription>
         </DialogHeader>
 
@@ -54,7 +51,6 @@ const AcceptTransactionDialog: React.FC<AcceptTransactionDialogProps> = ({
               onAccept();
               setDeleteDialogOpen(false);
             }}
-            variant={"destructive"}
             disabled={isPending}
             type="submit"
           >

@@ -14,7 +14,7 @@ const useGetEventsByOrganizerId = (queries: GetUsersQueries) => {
     queryKey: ["events", queries],
     queryFn: async () => {
       const { data } = await axiosInstance.get<PageableResponse<Event>>(
-        "/events/event-lists",
+        "/dashboard-organizer/event-lists",
         {
           params,
         },

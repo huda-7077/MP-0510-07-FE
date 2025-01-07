@@ -27,6 +27,7 @@ const DeleteEventDialog: React.FC<DeleteEventDialogProps> = ({
     <Dialog open={isDeleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <DialogTrigger asChild>
         <Button
+          size="icon"
           variant={"destructive"}
           onClick={() => setDeleteDialogOpen(true)}
         >

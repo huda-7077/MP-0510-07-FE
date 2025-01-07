@@ -5,17 +5,25 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-const useRejectTransaction = () => {
+interface RejectTransactionPayload {
+  transactionId: number;
+  isRejected: boolean;
+  isAccepted: boolean;
+}
+const useUpdateTransaction = () => {
   const router = useRouter();
   const { axiosInstance } = useAxios();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id: number) => {
-      const { data } = await axiosInstance.post(`/events/${id}`);
+    mutationFn: async (payload: RejectTransactionPayload) => {
+      const { data } = await axiosInstance.patch(
+        "/transactions/update",
+        payload,
+      );
       return data;
     },
     onSuccess: async () => {
-      toast.success("Delete event success");
+      toast.success("Update transaction status success");
       await queryClient.invalidateQueries({ queryKey: ["transactions"] });
       router.replace("/dashboard/payments");
     },
@@ -25,4 +33,4 @@ const useRejectTransaction = () => {
   });
 };
 
-export default useRejectTransaction;
+export default useUpdateTransaction;
