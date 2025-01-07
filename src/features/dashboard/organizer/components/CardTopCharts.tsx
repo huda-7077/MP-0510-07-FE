@@ -1,20 +1,14 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-<<<<<<< HEAD
 import { Skeleton } from "@/components/ui/skeleton";
-=======
->>>>>>> main
 
 interface CardTopChartsProps {
   totalRevenue: number | undefined;
   totalTicketsSold: number | undefined;
   totalEvents: number | undefined;
   userName: string | undefined;
-<<<<<<< HEAD
   isPending: boolean;
-=======
->>>>>>> main
 }
 
 export function CardTopCharts({
@@ -22,7 +16,6 @@ export function CardTopCharts({
   totalTicketsSold,
   totalEvents,
   userName,
-<<<<<<< HEAD
   isPending,
 }: CardTopChartsProps) {
   if (isPending) {
@@ -41,9 +34,7 @@ export function CardTopCharts({
       </div>
     );
   }
-=======
-}: CardTopChartsProps) {
->>>>>>> main
+  
   return (
     <div className="grid auto-rows-min gap-4 md:grid-cols-4">
       <Card>
