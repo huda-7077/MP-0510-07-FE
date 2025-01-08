@@ -1,3 +1,4 @@
+import { Coupon } from "./coupon";
 import { Organizer } from "./organizer";
 
 export interface User {
@@ -8,11 +9,12 @@ export interface User {
   profilePicture: string;
   role: string;
   referralCode: string;
-  points: number;
+  totalPoints: number;
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
   organizers: Organizer | null;
+  coupon: Coupon | null;
 }
 
 export interface UserResponse {

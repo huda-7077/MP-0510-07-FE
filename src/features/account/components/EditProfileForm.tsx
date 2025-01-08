@@ -20,6 +20,7 @@ import useGetProfile from "@/hooks/api/account/useGetProfile";
 import useUpdateProfile from "@/hooks/api/account/useUpdateProfile";
 import { EditProfileSchema } from "../schemas";
 import SkeletonProfile from "./SkeletonProfile";
+import { Card, CardContent } from "@/components/ui/card";
 
 const EditProfileForm = () => {
   const { data, isPending: isPendingGet } = useGetProfile();
@@ -68,87 +69,94 @@ const EditProfileForm = () => {
   if (isPendingGet) return <SkeletonProfile />;
 
   return (
-    <form className="mt-4 space-y-6" onSubmit={formik.handleSubmit}>
-      <div className="flex flex-col space-y-1.5">
-        <Label htmlFor="profilePicture" className="text-base">
-          Profile Picture
-        </Label>
-        <div className="mt-2 flex items-center space-x-4">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Avatar className="h-28 w-28 cursor-pointer md:h-36 md:w-36">
-                <AvatarImage src={selectedImage || ""} alt="Profile picture" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </DialogTrigger>
-            <DialogContent className="mx-auto max-w-md space-y-1.5 rounded-lg p-4 shadow-md">
-              <DialogHeader>
-                <DialogTitle className="text-center">
-                  Profile Picture
-                </DialogTitle>
-                <DialogDescription className="text-center">
-                  Change or remove your profile picture here.
-                  <br />
-                  (Size must be less than 1MB)
-                </DialogDescription>
-              </DialogHeader>
-              {selectedImage && (
-                <div>
-                  <div className="relative mx-auto aspect-square w-full">
-                    <Image
-                      src={selectedImage}
-                      alt="Profile Preview"
-                      fill
-                      priority
-                      sizes="70%"
-                      className="rounded-md object-cover"
+    <Card>
+      <CardContent className="flex flex-col p-4">
+        <form className="space-y-6" onSubmit={formik.handleSubmit}>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="profilePicture" className="text-base">
+              Profile Picture
+            </Label>
+            <div className="mt-2 flex items-center space-x-4">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Avatar className="h-28 w-28 cursor-pointer md:h-36 md:w-36">
+                    <AvatarImage
+                      src={selectedImage || ""}
+                      alt="Profile picture"
                     />
-                  </div>
-                  <div className="flex justify-center space-x-4">
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={handleRemoveProfilePicture}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-                </div>
-              )}
-              <Input
-                ref={profilePictureRef}
-                type="file"
-                accept="image/*"
-                onChange={handleProfilePictureChange}
-                className="mx-auto max-w-xs"
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-      <div className="flex flex-col space-y-1.5">
-        <Label htmlFor="fullname" className="text-base">
-          Full Name
-        </Label>
-        <Input
-          id="fullname"
-          name="fullname"
-          type="text"
-          placeholder="Full Name"
-          value={formik.values.fullname}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.fullname && formik.errors.fullname && (
-          <p className="text-xs text-red-500">{formik.errors.fullname}</p>
-        )}
-      </div>
-      <div className="flex justify-end">
-        <Button type="submit" className="md:my-3" disabled={isPending}>
-          {isPending ? "Loading..." : "Save Changes"}
-        </Button>
-      </div>
-    </form>
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DialogTrigger>
+                <DialogContent className="mx-auto max-w-md space-y-1.5 rounded-lg p-4 shadow-md">
+                  <DialogHeader>
+                    <DialogTitle className="text-center">
+                      Profile Picture
+                    </DialogTitle>
+                    <DialogDescription className="text-center">
+                      Change or remove your profile picture here.
+                      <br />
+                      (Size must be less than 1MB)
+                    </DialogDescription>
+                  </DialogHeader>
+                  {selectedImage && (
+                    <div>
+                      <div className="relative mx-auto aspect-square w-full">
+                        <Image
+                          src={selectedImage}
+                          alt="Profile Preview"
+                          fill
+                          priority
+                          sizes="70%"
+                          className="rounded-md object-cover"
+                        />
+                      </div>
+                      <div className="flex justify-center space-x-4">
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={handleRemoveProfilePicture}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  <Input
+                    ref={profilePictureRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfilePictureChange}
+                    className="mx-auto max-w-xs"
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="fullname" className="text-base">
+              Full Name
+            </Label>
+            <Input
+              id="fullname"
+              name="fullname"
+              type="text"
+              placeholder="Full Name"
+              value={formik.values.fullname}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.touched.fullname && formik.errors.fullname && (
+              <p className="text-xs text-red-500">{formik.errors.fullname}</p>
+            )}
+          </div>
+          <div className="flex justify-end">
+            <Button type="submit" className="md:my-3" disabled={isPending}>
+              {isPending ? "Loading..." : "Save Changes"}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

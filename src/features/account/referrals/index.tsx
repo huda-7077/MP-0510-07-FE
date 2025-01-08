@@ -66,7 +66,7 @@ const ReferralProgramPage = () => {
 
   return (
     <>
-      <div className="mx-auto w-full max-w-2xl px-4">
+      <div className="w-full max-w-2xl px-1 md:px-4">
         <h1 className="mb-6 text-3xl font-bold">Referral Program</h1>
         <div className="space-y-6">
           <div>

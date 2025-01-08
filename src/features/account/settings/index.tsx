@@ -10,7 +10,7 @@ import { ChangePasswordDialog } from "../components/ChangePasswordDialog";
 import SkeletonSettings from "../components/SkeletonSettings";
 
 const AccountSettingsPage = () => {
-  const [notifications, setNotifications] = useState(false);
+  const [notifications, setNotifications] = useState(true);
   const { data, isPending: isPendingGet } = useGetProfile();
 
   const [userRole, setUserRole] = useState("");
@@ -46,7 +46,7 @@ const AccountSettingsPage = () => {
   }
 
   return (
-    <main>
+    <main className="max-w-3xl flex-grow md:p-6">
       <div className="text-2xl font-bold md:text-3xl">Account Settings</div>
       <p className="text-sm text-muted-foreground">
         Manage your account details
