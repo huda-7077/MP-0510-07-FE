@@ -165,7 +165,7 @@ const CreateEventDialog = () => {
                     <div className="relative">
                       <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
-                        type="date"
+                        type="datetime-local"
                         name="startDate"
                         className="pl-10"
                         value={formik.values.startDate}
@@ -179,7 +179,7 @@ const CreateEventDialog = () => {
                     <div className="relative">
                       <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                       <Input
-                        type="date"
+                        type="datetime-local"
                         name="endDate"
                         className="pl-10"
                         value={formik.values.endDate}
