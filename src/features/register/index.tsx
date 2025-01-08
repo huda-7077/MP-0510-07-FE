@@ -1,14 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useRegister from "@/hooks/api/auth/useRegister";
 import { useFormik } from "formik";
-import { RegisterSchema } from "./schemas";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useQueryState } from "nuqs";
+import { RegisterSchema } from "./schemas";
 
 const RegisterPage = () => {
   const [search] = useQueryState("ref", { defaultValue: "" });
@@ -39,7 +39,7 @@ const RegisterPage = () => {
                   <div className="flex flex-col items-center text-center">
                     <h1 className="text-2xl font-bold">Create an Account</h1>
                     <p className="text-balance text-muted-foreground">
-                      Register for your Suket account
+                      Register for your Star Ticket account
                     </p>
                   </div>
                   <div className="grid gap-2">
@@ -159,7 +159,8 @@ const RegisterPage = () => {
           </Card>
           <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
             By clicking Register, you agree to our{" "}
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            <Link href="/terms-of-service">Terms of Service</Link> and{" "}
+            <Link href="/privacy-policy">Privacy Policy</Link>.
           </div>
         </div>
       </div>

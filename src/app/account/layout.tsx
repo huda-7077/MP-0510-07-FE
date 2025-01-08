@@ -35,7 +35,7 @@ export default async function ProfileLayout({ children }: ProfileLayoutProps) {
           <aside className="-mx-4 lg:w-1/5">
             <SidebarNav items={sidebarNavItems} />
           </aside>
-          <div className="w-full flex-1 md:max-w-2xl">{children}</div>
+          <div className="w-full flex-1">{children}</div>
         </div>
       </div>
     </>
