@@ -12,11 +12,11 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="w-full">
+        <div className="w-full pt-10">
           <HeroSection />
         </div>
 
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto">
           <EventList />
         </div>
 
