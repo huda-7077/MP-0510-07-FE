@@ -9,7 +9,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import NuqsProvider from "@/providers/NuqsProvider";
 
 export const metadata: Metadata = {
-  title: "Ticket App",
+  title: "StarTicket",
   description: "Ticketing app",
 };
 

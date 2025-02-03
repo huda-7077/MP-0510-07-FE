@@ -1,18 +1,15 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import { Event } from "@/types/event";
 import { format } from "date-fns";
-import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, Users } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { FC } from "react";
 
 interface EventCardProps {
@@ -23,7 +20,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
   return (
     <Card className="group h-full overflow-hidden transition-all duration-300 hover:border-emerald-200">
       <CardHeader className="p-0">
-        <div className="relative h-[220px] w-full overflow-hidden">
+        <div className="relative h-[120px] md:h-[220px] w-full overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-0" />
           <Image
             src={event.thumbnail}
@@ -33,13 +30,17 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
           />
           <div className="absolute right-3 top-3">
             <Badge className="bg-emerald-500 text-white hover:bg-emerald-600">
-              {event.avaliableSeats} seats left
+            {event.avaliableSeats === 0 ? (
+                <span className="font-medium ">Sold Out</span>
+              ) : (
+                <span>{event.avaliableSeats} seats</span>
+              )}
             </Badge>
           </div>
         </div>
       </CardHeader>
 
-      <div className="p-5">
+      <div className="p-3 md:p-5">
         <CardTitle className="line-clamp-1 text-xl font-bold tracking-tight text-gray-900">
           {event.title}
         </CardTitle>
@@ -61,7 +62,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
             <span className="line-clamp-1">{event.location}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          {/* <div className="flex items-center gap-2 text-sm text-gray-600">
             <Users className="h-4 w-4 text-emerald-500" />
             <span>
               {event.avaliableSeats === 0 ? (
@@ -70,7 +71,7 @@ const EventCard: FC<EventCardProps> = ({ event }) => {
                 <span>{event.avaliableSeats} seats available</span>
               )}
             </span>
-          </div>
+          </div> */}
         </CardContent>
 
        

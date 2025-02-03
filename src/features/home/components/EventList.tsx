@@ -1,10 +1,9 @@
 "use client";
 
 import useGetEvents from "@/hooks/api/event/useGetEvents";
-import { useState } from "react";
-import EventCard from "./EventCard";
-import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, Loader2 } from "lucide-react";
 import Link from "next/link";
+import EventCard from "./EventCard";
 
 const EventList = () => {
   const { data, isPending } = useGetEvents({});
@@ -38,8 +37,7 @@ const EventList = () => {
 
   return (
     <section className="bg-gradient-to-b from-green-50/50 to-white">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        {/* Header */}
+      <div className="mx-auto max-w-6xl px-5 md:px-0 py-16 ">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -49,28 +47,8 @@ const EventList = () => {
               Don't miss out on these exciting upcoming events
             </p>
           </div>
-
-          {/* Navigation Controls */}
-          {/* <div className="flex items-center space-x-2">
-            <button
-              onClick={() => handlePageChange(Math.max(1, page - 1))}
-              disabled={page === 1}
-              className="rounded-full p-2 text-gray-600 transition-colors hover:bg-green-100 hover:text-emerald-600 disabled:opacity-50"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <span className="text-sm font-medium text-gray-700">Page {page}</span>
-            <button
-              onClick={() => handlePageChange(page + 1)}
-              disabled={!data?.data.length}
-              className="rounded-full p-2 text-gray-600 transition-colors hover:bg-green-100 hover:text-emerald-600 disabled:opacity-50"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </div> */}
         </div>
 
-        {/* Events Grid */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {data?.data.slice(0, 4).map((event, index) => (
             <Link
@@ -85,25 +63,6 @@ const EventList = () => {
             </Link>
           ))}
         </div>
-
-        {/* Mobile Pagination
-        <div className="mt-8 flex items-center justify-center space-x-4 sm:hidden">
-          <button
-            onClick={() => handlePageChange(Math.max(1, page - 1))}
-            disabled={page === 1}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-green-50 disabled:opacity-50"
-          >
-            Previous
-          </button>
-          <span className="text-sm font-medium text-gray-700">Page {page}</span>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={!data?.data.length}
-            className="rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-green-50 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div> */}
       </div>
     </section>
   );
